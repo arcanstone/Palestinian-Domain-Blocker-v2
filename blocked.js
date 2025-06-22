@@ -1,13 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Enhanced blocked page loaded');
+    
     
     // Get the blocked domain from URL parameters
     const urlParams = new URLSearchParams(window.location.search);
     const blockedDomain = urlParams.get('domain') || extractDomainFromReferrer() || extractDomainFromCurrentUrl();
     
-    console.log('Blocked domain detected:', blockedDomain);
-    console.log('URL params:', urlParams.toString());
-    console.log('Referrer:', document.referrer);
+    
+    
+    
     
     if (blockedDomain) {
         // Show domain info
@@ -17,13 +17,13 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Load and show alternative recommendation
-        console.log('Loading alternative for:', blockedDomain);
+        
         loadAlternativeRecommendation(blockedDomain);
         
         // Update impact stats when a site is blocked
         updateImpactOnBlock(blockedDomain);
     } else {
-        console.log('No blocked domain detected - showing fallback alternative');
+        
         // Show a generic alternative if no domain is detected
         const fallbackAlternative = {
             name: "Ethical Alternatives Directory",
@@ -48,7 +48,7 @@ function extractDomainFromReferrer() {
             return url.hostname;
         }
     } catch (e) {
-        console.log('Could not extract domain from referrer');
+        
     }
     return null;
 }
@@ -66,7 +66,7 @@ function extractDomainFromCurrentUrl() {
             }
         }
     } catch (e) {
-        console.log('Could not extract domain from current URL');
+        
     }
     return null;
 }
@@ -80,7 +80,7 @@ function loadAlternativeRecommendation(domain) {
         domain: domain
     }, (response) => {
         if (chrome.runtime.lastError) {
-            console.log('Error getting alternative:', chrome.runtime.lastError);
+            
             // Fallback to local alternative detection
             const alternative = getLocalAlternative(domain);
             if (alternative) {
@@ -243,7 +243,7 @@ const timer = setInterval(() => {
 function loadPersonalImpactStats() {
     chrome.storage.local.get(['personalImpact'], (data) => {
         if (chrome.runtime.lastError) {
-            console.log('Error loading impact stats:', chrome.runtime.lastError);
+            
             return;
         }
         
@@ -288,9 +288,9 @@ function updateImpactOnBlock(domain) {
         domain: domain
     }, (response) => {
         if (chrome.runtime.lastError) {
-            console.log('Error updating impact:', chrome.runtime.lastError);
+            
         } else {
-            console.log('Impact updated for domain:', domain);
+            
         }
     });
 }
@@ -301,7 +301,7 @@ function trackBlockEvent(domain) {
     // Track this block event for statistics
     chrome.storage.local.get(['blockEvents'], (data) => {
         if (chrome.runtime.lastError) {
-            console.log('Error tracking block event:', chrome.runtime.lastError);
+            
             return;
         }
         
@@ -319,7 +319,7 @@ function trackBlockEvent(domain) {
         
         chrome.storage.local.set({ blockEvents: events }, () => {
             if (chrome.runtime.lastError) {
-                console.log('Error saving block events:', chrome.runtime.lastError);
+                
             }
         });
     });
@@ -329,7 +329,7 @@ function trackAlternativeClick(alternativeName) {
     // Track when users click on alternative recommendations
     chrome.storage.local.get(['alternativeClicks'], (data) => {
         if (chrome.runtime.lastError) {
-            console.log('Error tracking alternative click:', chrome.runtime.lastError);
+            
             return;
         }
         
@@ -338,9 +338,9 @@ function trackAlternativeClick(alternativeName) {
         
         chrome.storage.local.set({ alternativeClicks: clicks }, () => {
             if (chrome.runtime.lastError) {
-                console.log('Error saving alternative clicks:', chrome.runtime.lastError);
+                
             } else {
-                console.log(`Alternative click tracked: ${alternativeName}`);
+                
             }
         });
     });
@@ -368,7 +368,7 @@ function trackQuickAction(type, text) {
         
         chrome.storage.local.set({ quickActionClicks: actions }, () => {
             if (!chrome.runtime.lastError) {
-                console.log(`Quick action tracked: ${type} - ${text}`);
+                
             }
         });
     });

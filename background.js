@@ -514,7 +514,7 @@ function submitDomainForReview(domain, category, evidence, submittedBy) {
     // Store in local storage for persistence
     chrome.storage.local.set({ userSubmissions: userSubmissions });
     
-    console.log('New domain submission:', submission);
+    
     return submission.id;
 }
 
@@ -567,7 +567,7 @@ function addDomainToBlocklist(domain, category, evidence) {
                 domainEvidence: domainEvidence
             });
             
-            console.log(`Added verified domain: ${domain}`);
+            
         }
     });
 }
@@ -576,7 +576,7 @@ function addDomainToBlocklist(domain, category, evidence) {
 function scheduleRegularUpdates() {
     // Check for updates every 24 hours
     setInterval(() => {
-        console.log('Checking for domain list updates...');
+        
         // In a real implementation, this would sync with a server
         updateDomainListFromCrowdsource();
     }, 24 * 60 * 60 * 1000);
@@ -585,7 +585,7 @@ function scheduleRegularUpdates() {
 function updateDomainListFromCrowdsource() {
     // Placeholder for crowdsourced updates
     // Would fetch from a community-maintained database
-    console.log('Fetching community updates...');
+    
 }
 
 // Alternative recommendations for blocked sites
@@ -850,7 +850,7 @@ function updateImpactStats(domain) {
     // Save updated stats
     chrome.storage.local.set({ personalImpact });
     
-    console.log(`Impact updated: ${domain} blocked. Total sites blocked: ${personalImpact.sitesBlocked}`);
+    
 }
 
 // Get alternative recommendation for a domain
@@ -887,7 +887,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 sendResponse({ error: 'Unknown action' });
         }
     } catch (error) {
-        console.error('Error handling message:', error);
+        
         sendResponse({ error: error.message });
     }
 });
@@ -913,19 +913,19 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // On installation, set up the pre-selected domains
 chrome.runtime.onInstalled.addListener(() => {
-    console.log("Extension installed or updated.");
+    
 
     chrome.storage.local.get(["blockedDomains", "whitelistedDomains"], (data) => {
         let blockedDomains = data.blockedDomains || [];
         let whitelistedDomains = data.whitelistedDomains || [];
-        console.log("Existing blocked domains:", blockedDomains);
-        console.log("Existing whitelisted domains:", whitelistedDomains);
+        
+        
 
         // Add pre-selected domains only if they aren't already in storage
         preSelectedDomains.forEach((domain) => {
             if (!blockedDomains.includes(domain)) {
                 blockedDomains.push(domain);
-                console.log(`Added ${domain} to blocked domains.`);
+                
             }
         });
 
@@ -933,8 +933,8 @@ chrome.runtime.onInstalled.addListener(() => {
             blockedDomains, 
             whitelistedDomains 
         }, () => {
-            console.log("Blocked domains updated in storage:", blockedDomains);
-            console.log("Whitelisted domains in storage:", whitelistedDomains);
+            
+            
             updateBlockingRules(blockedDomains, whitelistedDomains);
         });
     });
@@ -951,8 +951,8 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
             const blockedDomains = changes.blockedDomains?.newValue || data.blockedDomains || [];
             const whitelistedDomains = changes.whitelistedDomains?.newValue || data.whitelistedDomains || [];
             
-            console.log("Storage changed, new blocked domains:", blockedDomains);
-            console.log("Storage changed, new whitelisted domains:", whitelistedDomains);
+            
+            
             updateBlockingRules(blockedDomains, whitelistedDomains);
         });
     }
@@ -960,8 +960,8 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 
 // Function to update dynamic rules based on the blocked domains and whitelist
 function updateBlockingRules(blockedDomains, whitelistedDomains = []) {
-    console.log("Updating blocking rules for domains:", blockedDomains);
-    console.log("Whitelist:", whitelistedDomains);
+    
+    
 
     try {
         // Filter out whitelisted domains from blocked domains
@@ -969,7 +969,7 @@ function updateBlockingRules(blockedDomains, whitelistedDomains = []) {
             !whitelistedDomains.includes(domain)
         );
 
-        console.log("Effective blocked domains after whitelist filter:", effectiveBlockedDomains);
+        
 
         const rules = effectiveBlockedDomains.map((domain, index) => ({
         id: index + 1,
@@ -978,31 +978,31 @@ function updateBlockingRules(blockedDomains, whitelistedDomains = []) {
         condition: { urlFilter: `*://*.${domain}/*`, resourceTypes: ["main_frame"] }
     }));
 
-    console.log("New rules to add:", rules);
+    
 
         // Get existing rules first, then clear and apply new ones
         chrome.declarativeNetRequest.getDynamicRules((existingRules) => {
             const existingIds = existingRules.map(rule => rule.id);
-            console.log("Existing rule IDs to remove:", existingIds);
+            
 
     chrome.declarativeNetRequest.updateDynamicRules({
         addRules: rules,
                 removeRuleIds: existingIds
     }, () => {
                 if (chrome.runtime.lastError) {
-                    console.error("Error updating dynamic rules:", chrome.runtime.lastError);
+                    
                 } else {
-        console.log("Dynamic rules updated successfully.");
+        
         
                     // Verify the current rules
         chrome.declarativeNetRequest.getDynamicRules((currentRules) => {
-                        console.log("Current dynamic rules after update:", currentRules);
+                        
                     });
                 }
             });
         });
     } catch (error) {
-        console.error("Error in updateBlockingRules:", error);
+        
     }
 }
 
@@ -1011,17 +1011,17 @@ chrome.storage.local.get(["blockedDomains", "whitelistedDomains"], (data) => {
     try {
     const blockedDomains = data.blockedDomains || [];
         const whitelistedDomains = data.whitelistedDomains || [];
-    console.log("Loaded blocked domains on startup:", blockedDomains);
-        console.log("Loaded whitelisted domains on startup:", whitelistedDomains);
+    
+        
         updateBlockingRules(blockedDomains, whitelistedDomains);
     } catch (error) {
-        console.error("Error loading initial blocking rules:", error);
+        
     }
 });
 
 // Error handling for extension errors
 chrome.runtime.onStartup.addListener(() => {
-    console.log("Extension startup - reloading rules");
+    
     chrome.storage.local.get(["blockedDomains", "whitelistedDomains"], (data) => {
         const blockedDomains = data.blockedDomains || [];
         const whitelistedDomains = data.whitelistedDomains || [];

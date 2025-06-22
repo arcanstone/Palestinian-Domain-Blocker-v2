@@ -1,58 +1,116 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Tab handling
+    // Performance optimization: batch DOM operations
+    const batchDOMUpdates = (callback) => {
+        requestAnimationFrame(callback);
+    };
+
+    // Error handling wrapper
+    const safeExecute = (fn, context = 'Unknown') => {
+        try {
+            return fn();
+        } catch (error) {
+            showToast(`Error in ${context}. Please refresh the extension.`, 'error');
+            return null;
+        }
+    };
+
+    // Tab handling with error protection
     const tabs = document.querySelectorAll('.tab');
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            document.getElementById(`${tab.dataset.tab}-content`).classList.add('active');
+            safeExecute(() => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                const targetContent = document.getElementById(`${tab.dataset.tab}-content`);
+                if (targetContent) {
+                    targetContent.classList.add('active');
+                }
+            }, 'Tab switching');
         });
     });
 
-    // Function to show toast message with different types
+    // Optimized toast system with queue
+    let toastQueue = [];
+    let isShowingToast = false;
+
     function showToast(message, type = 'info', duration = 3000) {
+        const toast = { message, type, duration };
+        toastQueue.push(toast);
+        
+        if (!isShowingToast) {
+            processToastQueue();
+        }
+    }
+
+    function processToastQueue() {
+        if (toastQueue.length === 0) {
+            isShowingToast = false;
+            return;
+        }
+
+        isShowingToast = true;
+        const { message, type, duration } = toastQueue.shift();
+        
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
         toast.textContent = message;
         document.body.appendChild(toast);
         
-        // Trigger animation
-        setTimeout(() => toast.classList.add('show'), 10);
+        batchDOMUpdates(() => toast.classList.add('show'));
         
         setTimeout(() => {
             toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+                processToastQueue();
+            }, 300);
         }, duration);
     }
 
-    // Function to check if a domain is valid
+    // Debounced search function for performance
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Enhanced domain validation with performance optimization
     function isValidDomain(domain) {
-        // More comprehensive domain validation
+        if (!domain || typeof domain !== 'string') return false;
+        
+        // Quick length check
+        if (domain.length > 253 || domain.length < 1) return false;
+        
+        // Quick format checks
+        if (domain.startsWith('.') || domain.endsWith('.') || domain.includes('..')) return false;
+        
+        // Optimized regex patterns
         const domainPattern = /^(?!-)(?!.*--)[A-Za-z0-9-]{1,63}(?<!-)(\.[A-Za-z]{2,})+$/;
         const ipPattern = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
         
-        // Check for valid domain or IP
-        if (!domainPattern.test(domain) && !ipPattern.test(domain)) {
-            return false;
-        }
-        
-        // Additional checks
-        if (domain.length > 253) return false;
-        if (domain.startsWith('.') || domain.endsWith('.')) return false;
-        
-        return true;
+        return domainPattern.test(domain) || ipPattern.test(domain);
     }
 
-    // Function to normalize domain (remove protocol, www, trailing slash)
+    // Optimized domain normalization
     function normalizeDomain(domain) {
+        if (!domain) return '';
         return domain
             .replace(/^https?:\/\//, '')
             .replace(/^www\./, '')
             .replace(/\/$/, '')
-            .toLowerCase();
+            .toLowerCase()
+            .trim();
     }
 
     // Function to create domain item element with better error handling
@@ -125,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             } catch (error) {
-                console.error('Error editing domain:', error);
+                
                 showToast('An error occurred while editing the domain.', 'error');
             }
         });
@@ -158,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 });
             } catch (error) {
-                console.error('Error deleting domain:', error);
+                
                 showToast('An error occurred while deleting the domain.', 'error');
             }
         });
@@ -208,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateDomainCount(isWhitelist, domains.length);
             });
         } catch (error) {
-            console.error('Error displaying domains:', error);
+            
             showToast('An error occurred while loading domains.', 'error');
         }
     }
@@ -290,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
         } catch (error) {
-            console.error('Error blocking domain:', error);
+            
             showToast('An error occurred while blocking the domain.', 'error');
         }
     });
@@ -361,7 +419,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
         } catch (error) {
-            console.error('Error whitelisting domain:', error);
+            
             showToast('An error occurred while whitelisting the domain.', 'error');
         }
     });
@@ -419,7 +477,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 showToast(`${domains.length} domains exported successfully!`, 'success');
             });
         } catch (error) {
-            console.error('Error exporting domains:', error);
+            
             showToast('An error occurred while exporting domains.', 'error');
         }
     }
@@ -474,7 +532,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         });
                     });
                 } catch (error) {
-                    console.error('Error processing import file:', error);
+                    
                     showToast('Error processing the import file.', 'error');
                 }
             };
@@ -504,14 +562,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         } catch (error) {
-            console.error(`Error clearing ${type} domains:`, error);
+            
             showToast(`An error occurred while clearing ${type} domains.`, 'error');
         }
     }
 
     // Bug reporting functionality
 function setupBugReporting() {
-    console.log('Setting up bug reporting...');
+    
     
     const bugReportBtn = document.querySelector('.bug-report');
     const bugModal = document.getElementById('bug-modal');
@@ -530,13 +588,13 @@ function setupBugReporting() {
     });
 
     if (bugReportBtn && bugModal) {
-        console.log('Adding bug report button listener');
+        
         bugReportBtn.addEventListener('click', () => {
-            console.log('Bug report button clicked!');
+            
             bugModal.classList.add('active');
         });
     } else {
-        console.error('Bug report button or modal not found!');
+        
     }
 
     if (modalClose && bugModal) {
@@ -655,7 +713,7 @@ Please provide any additional context or screenshots that might help resolve thi
                 if (totalBlocksEl) totalBlocksEl.textContent = totalBlocks;
             });
         } catch (error) {
-            console.error('Error updating statistics:', error);
+            
         }
     }
 
@@ -861,96 +919,61 @@ function filterCategories(searchTerm) {
 
 // Submissions functionality
 function setupSubmissions() {
-    console.log('Setting up submissions...');
-    
-    // Check if submit tab exists
     const submitTab = document.querySelector('[data-tab="submit"]');
-    const submitContent = document.getElementById('submit-content');
-    console.log('Submit tab elements:', {
-        submitTab: !!submitTab,
-        submitContent: !!submitContent
-    });
-    
-    // Add specific click handler for submit tab to ensure it works
-    if (submitTab) {
-        submitTab.addEventListener('click', () => {
-            console.log('Submit tab clicked!');
-            // Ensure the content is visible
-            setTimeout(() => {
-                const btn = document.getElementById('submit-domain-btn');
-                if (btn) {
-                    btn.style.display = 'block';
-                    btn.style.visibility = 'visible';
-                    console.log('Submit button made visible after tab click');
-                }
-            }, 100);
-        });
-    }
-    
     const submitBtn = document.getElementById('submit-domain-btn');
     const evidenceTextarea = document.getElementById('submit-evidence');
     const charCount = document.getElementById('evidence-char-count');
     
-    console.log('Submit elements found:', {
-        submitBtn: !!submitBtn,
-        evidenceTextarea: !!evidenceTextarea,
-        charCount: !!charCount
-    });
-    
+    // Character counter for evidence textarea
     if (evidenceTextarea && charCount) {
         evidenceTextarea.addEventListener('input', () => {
             charCount.textContent = evidenceTextarea.value.length;
         });
     }
     
-    if (submitBtn) {
-        console.log('Adding click listener to submit button');
-        submitBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            console.log('Submit button clicked!');
-            handleDomainSubmission();
-        });
-        
-        // Make sure button is visible
-        submitBtn.style.display = 'block';
-        submitBtn.style.visibility = 'visible';
-        console.log('Submit button visibility set');
-    } else {
-        console.error('Submit button not found!');
-        // Try to find it again after a delay
+    // Submit button handler with fallback
+    const attachSubmitHandler = (btn) => {
+        if (btn) {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                handleDomainSubmission();
+            });
+            return true;
+        }
+        return false;
+    };
+    
+    if (!attachSubmitHandler(submitBtn)) {
+        // Fallback: try again after DOM is fully loaded
         setTimeout(() => {
             const delayedBtn = document.getElementById('submit-domain-btn');
-            if (delayedBtn) {
-                console.log('Found submit button on retry');
-                delayedBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    console.log('Submit button clicked (delayed)!');
-                    handleDomainSubmission();
-                });
-            }
-        }, 1000);
+            attachSubmitHandler(delayedBtn);
+        }, 500);
+    }
+    
+    // Ensure submit content is accessible when tab is clicked
+    if (submitTab) {
+        submitTab.addEventListener('click', () => {
+            setTimeout(() => {
+                const btn = document.getElementById('submit-domain-btn');
+                if (btn) {
+                    btn.style.display = 'block';
+                    btn.style.visibility = 'visible';
+                }
+            }, 50);
+        });
     }
     
     loadUserSubmissions();
 }
 
 function handleDomainSubmission() {
-    console.log('Domain submission triggered!');
-    
     const domainInput = document.getElementById('submit-domain');
     const categorySelect = document.getElementById('submit-category');
     const evidenceTextarea = document.getElementById('submit-evidence');
     const nameInput = document.getElementById('submit-name');
     
-    console.log('Form elements found:', {
-        domainInput: !!domainInput,
-        categorySelect: !!categorySelect,
-        evidenceTextarea: !!evidenceTextarea,
-        nameInput: !!nameInput
-    });
-    
     if (!domainInput || !categorySelect || !evidenceTextarea) {
-        console.error('Missing form elements!');
         showToast('Form elements not found. Please refresh the extension.', 'error');
         return;
     }
@@ -1113,43 +1136,6 @@ function displayUserSubmissions(submissions) {
     });
 }
 
-// Helper functions already defined above
-function normalizeDomain(domain) {
-    return domain
-        .replace(/^https?:\/\//, '')
-        .replace(/^www\./, '')
-        .replace(/\/$/, '')
-        .toLowerCase();
-}
-
-function isValidDomain(domain) {
-    const domainPattern = /^(?!-)(?!.*--)[A-Za-z0-9-]{1,63}(?<!-)(\.[A-Za-z]{2,})+$/;
-    const ipPattern = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-    
-    if (!domainPattern.test(domain) && !ipPattern.test(domain)) {
-        return false;
-    }
-    
-    if (domain.length > 253) return false;
-    if (domain.startsWith('.') || domain.endsWith('.')) return false;
-    
-    return true;
-}
-
-function showToast(message, type = 'info', duration = 3000) {
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => toast.classList.add('show'), 10);
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 300);
-    }, duration);
-}
-
 // Impact Tab Functions
 function setupImpactTab() {
     // Set up click tracking for quick action links
@@ -1178,7 +1164,7 @@ function loadImpactTab() {
 function loadPersonalImpactStats() {
     chrome.storage.local.get(['personalImpact', 'blockEvents'], (data) => {
         if (chrome.runtime.lastError) {
-            console.error('Error loading impact stats:', chrome.runtime.lastError);
+            
             return;
         }
         
@@ -1220,7 +1206,7 @@ function loadPersonalImpactStats() {
 function loadAlternativeStats() {
     chrome.storage.local.get(['alternativeClicks'], (data) => {
         if (chrome.runtime.lastError) {
-            console.error('Error loading alternative stats:', chrome.runtime.lastError);
+            
             return;
         }
         
@@ -1248,7 +1234,7 @@ function loadAlternativeStats() {
 function loadQuickActionStats() {
     chrome.storage.local.get(['quickActionClicks'], (data) => {
         if (chrome.runtime.lastError) {
-            console.error('Error loading quick action stats:', chrome.runtime.lastError);
+            
             return;
         }
         
@@ -1278,7 +1264,7 @@ function trackQuickActionClick(text, url) {
         
         chrome.storage.local.set({ quickActionClicks: actions }, () => {
             if (!chrome.runtime.lastError) {
-                console.log(`Quick action tracked: ${text}`);
+                
                 // Refresh stats if we're on the impact tab
                 const impactTab = document.querySelector('[data-tab="impact"]');
                 if (impactTab && impactTab.classList.contains('active')) {

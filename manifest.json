@@ -1,12 +1,15 @@
 {
   "manifest_version": 3,
-  "name": "Israeli Domain Blocker",
-  "version": "1.1",
-  "description": "Blocks web apps founded in Israel or Israeli people so we don't fund the occupation regime.",
+  "name": "Palestinian Domain Blocker",
+  "version": "2.0.0",
+  "description": "Community-driven domain blocking extension supporting Palestinian solidarity through ethical boycotts. Block Israeli domains and companies complicit in occupation.",
+  "author": "Palestinian Solidarity Community",
+  "homepage_url": "https://github.com/oussamakou/Palestinian-Domain-Blocker-v2",
   "permissions": [
     "declarativeNetRequest",
     "declarativeNetRequestWithHostAccess",
-    "storage"
+    "storage",
+    "tabs"
   ],
   "background": {
     "service_worker": "background.js"
@@ -15,12 +18,17 @@
     "*://*/*"
   ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_title": "Palestinian Domain Blocker"
   },
   "web_accessible_resources": [
-      {
-          "resources": ["blocked.html"],
-          "matches": ["<all_urls>"]
-      }
-  ]
+    {
+      "resources": ["blocked.html", "blocked.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "minimum_chrome_version": "88"
 }
