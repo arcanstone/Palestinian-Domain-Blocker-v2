@@ -509,27 +509,83 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-         // Bug report functionality (if exists in UI)
-     function reportBug() {
-         const bugInput = document.getElementById('bug-description');
-         if (!bugInput) return;
+    // Bug reporting functionality
+function setupBugReporting() {
+    console.log('Setting up bug reporting...');
+    
+    const bugReportBtn = document.querySelector('.bug-report');
+    const bugModal = document.getElementById('bug-modal');
+    const modalClose = document.querySelector('.modal-close');
+    const bugDescription = document.getElementById('bug-description');
+    const charCount = document.getElementById('char-count');
+    const submitBugBtn = document.getElementById('submit-bug');
 
-         const description = bugInput.value.trim();
-         if (!description) {
-             showToast('Please describe the bug', 'error');
-             return;
-         }
+    console.log('Bug report elements found:', {
+        bugReportBtn: !!bugReportBtn,
+        bugModal: !!bugModal,
+        modalClose: !!modalClose,
+        bugDescription: !!bugDescription,
+        charCount: !!charCount,
+        submitBugBtn: !!submitBugBtn
+    });
 
-         // Get extension info for bug report
-         const extensionInfo = {
-             version: chrome.runtime.getManifest().version,
-             browser: navigator.userAgent,
-             timestamp: new Date().toISOString()
-         };
+    if (bugReportBtn && bugModal) {
+        console.log('Adding bug report button listener');
+        bugReportBtn.addEventListener('click', () => {
+            console.log('Bug report button clicked!');
+            bugModal.classList.add('active');
+        });
+    } else {
+        console.error('Bug report button or modal not found!');
+    }
 
-         // Create GitHub issue URL for bug report
-         const issueTitle = `[BUG REPORT] ${description.substring(0, 50)}${description.length > 50 ? '...' : ''}`;
-         const issueBody = `## Bug Report
+    if (modalClose && bugModal) {
+        modalClose.addEventListener('click', () => {
+            bugModal.classList.remove('active');
+            if (bugDescription) bugDescription.value = '';
+            if (charCount) charCount.textContent = '0';
+        });
+    }
+
+    if (bugDescription && charCount) {
+        bugDescription.addEventListener('input', () => {
+            charCount.textContent = bugDescription.value.length;
+        });
+    }
+
+    if (submitBugBtn) {
+        submitBugBtn.addEventListener('click', handleBugReport);
+    }
+}
+
+function handleBugReport() {
+    const bugInput = document.getElementById('bug-description');
+    const bugModal = document.getElementById('bug-modal');
+    const charCount = document.getElementById('char-count');
+    
+    if (!bugInput) return;
+
+    const description = bugInput.value.trim();
+    if (!description) {
+        showToast('Please describe the bug', 'error');
+        return;
+    }
+
+    if (description.length < 10) {
+        showToast('Please provide more details about the bug.', 'error');
+        return;
+    }
+
+    // Get extension info for bug report
+    const extensionInfo = {
+        version: chrome.runtime.getManifest().version,
+        browser: navigator.userAgent,
+        timestamp: new Date().toISOString()
+    };
+
+    // Create GitHub issue URL for bug report
+    const issueTitle = `[BUG REPORT] ${description.substring(0, 50)}${description.length > 50 ? '...' : ''}`;
+    const issueBody = `## Bug Report
 
 **Description:** ${description}
 
@@ -554,28 +610,32 @@ Please provide any additional context or screenshots that might help resolve thi
 ---
 *This bug report was created through the Palestinian Domain Blocker extension.*`;
 
-         const githubIssueUrl = `https://github.com/oussamakou/Palestinian-Domain-Blocker-v2/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}&labels=bug,user-report`;
+    const githubIssueUrl = `https://github.com/oussamakou/Palestinian-Domain-Blocker-v2/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}&labels=bug,user-report`;
 
-         // Also store locally as backup
-         const bugReport = {
-             description,
-             ...extensionInfo,
-             timestamp: Date.now(),
-             githubIssueUrl: githubIssueUrl
-         };
+    // Also store locally as backup
+    const bugReport = {
+        description,
+        ...extensionInfo,
+        timestamp: Date.now(),
+        githubIssueUrl: githubIssueUrl
+    };
 
-         chrome.storage.local.get(['bugReports'], (data) => {
-             const bugReports = data.bugReports || [];
-             bugReports.push(bugReport);
-             chrome.storage.local.set({ bugReports: bugReports }, () => {
-                 // Open GitHub issue creation page
-                 chrome.tabs.create({ url: githubIssueUrl });
+    chrome.storage.local.get(['bugReports'], (data) => {
+        const bugReports = data.bugReports || [];
+        bugReports.push(bugReport);
+        chrome.storage.local.set({ bugReports: bugReports }, () => {
+            // Close modal and clear form
+            if (bugModal) bugModal.classList.remove('active');
+            bugInput.value = '';
+            if (charCount) charCount.textContent = '0';
+            
+            // Open GitHub issue creation page
+            chrome.tabs.create({ url: githubIssueUrl });
 
-                 bugInput.value = '';
-                 showToast('GitHub issue created! Please complete the bug report there.', 'success');
-             });
-         });
-     }
+            showToast('GitHub issue created! Please complete the bug report there.', 'success');
+        });
+    });
+}
 
     // Statistics functionality
     function updateStatistics() {
@@ -643,6 +703,7 @@ Please provide any additional context or screenshots that might help resolve thi
     setupCategories();
     setupSubmissions();
     setupImpactTab();
+    setupBugReporting();
     
     // Update statistics periodically
     setInterval(updateStatistics, 5000);
@@ -800,9 +861,17 @@ function filterCategories(searchTerm) {
 
 // Submissions functionality
 function setupSubmissions() {
+    console.log('Setting up submissions...');
+    
     const submitBtn = document.getElementById('submit-domain-btn');
     const evidenceTextarea = document.getElementById('submit-evidence');
     const charCount = document.getElementById('evidence-char-count');
+    
+    console.log('Submit elements found:', {
+        submitBtn: !!submitBtn,
+        evidenceTextarea: !!evidenceTextarea,
+        charCount: !!charCount
+    });
     
     if (evidenceTextarea && charCount) {
         evidenceTextarea.addEventListener('input', () => {
@@ -811,19 +880,40 @@ function setupSubmissions() {
     }
     
     if (submitBtn) {
+        console.log('Adding click listener to submit button');
         submitBtn.addEventListener('click', handleDomainSubmission);
+        
+        // Also add a test click handler to verify it's working
+        submitBtn.addEventListener('click', () => {
+            console.log('Submit button clicked!');
+        });
+    } else {
+        console.error('Submit button not found!');
     }
     
     loadUserSubmissions();
 }
 
 function handleDomainSubmission() {
+    console.log('Domain submission triggered!');
+    
     const domainInput = document.getElementById('submit-domain');
     const categorySelect = document.getElementById('submit-category');
     const evidenceTextarea = document.getElementById('submit-evidence');
     const nameInput = document.getElementById('submit-name');
     
-    if (!domainInput || !categorySelect || !evidenceTextarea) return;
+    console.log('Form elements found:', {
+        domainInput: !!domainInput,
+        categorySelect: !!categorySelect,
+        evidenceTextarea: !!evidenceTextarea,
+        nameInput: !!nameInput
+    });
+    
+    if (!domainInput || !categorySelect || !evidenceTextarea) {
+        console.error('Missing form elements!');
+        showToast('Form elements not found. Please refresh the extension.', 'error');
+        return;
+    }
     
     const domain = normalizeDomain(domainInput.value.trim());
     const category = categorySelect.value;
