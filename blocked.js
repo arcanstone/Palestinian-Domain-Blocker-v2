@@ -206,9 +206,9 @@ function addAutoRedirectOption(alternative) {
     `;
     
     alternativeSection.appendChild(redirectInfo);
-    
-    // Countdown timer
-    const timer = setInterval(() => {
+
+// Countdown timer
+const timer = setInterval(() => {
         countdown--;
         const countdownEl = document.getElementById('redirect-countdown');
         if (countdownEl) countdownEl.textContent = countdown;
@@ -234,7 +234,7 @@ function addAutoRedirectOption(alternative) {
     const cancelBtn = document.getElementById('cancel-redirect');
     if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
-            clearInterval(timer);
+        clearInterval(timer);
             redirectInfo.remove();
         });
     }
