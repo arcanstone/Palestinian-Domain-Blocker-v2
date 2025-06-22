@@ -509,74 +509,73 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Bug report functionality with better implementation
-    const bugReport = document.querySelector('.bug-report');
-    const bugModal = document.getElementById('bug-modal');
-    const modalClose = document.querySelector('.modal-close');
-    const bugDescription = document.getElementById('bug-description');
-    const charCount = document.getElementById('char-count');
-    const submitBug = document.getElementById('submit-bug');
+         // Bug report functionality (if exists in UI)
+     function reportBug() {
+         const bugInput = document.getElementById('bug-description');
+         if (!bugInput) return;
 
-    if (bugReport && bugModal) {
-    bugReport.addEventListener('click', () => {
-        bugModal.classList.add('active');
-    });
+         const description = bugInput.value.trim();
+         if (!description) {
+             showToast('Please describe the bug', 'error');
+             return;
+         }
 
-        if (modalClose) {
-    modalClose.addEventListener('click', () => {
-        bugModal.classList.remove('active');
-                if (bugDescription) bugDescription.value = '';
-                if (charCount) charCount.textContent = '0';
-    });
-        }
+         // Get extension info for bug report
+         const extensionInfo = {
+             version: chrome.runtime.getManifest().version,
+             browser: navigator.userAgent,
+             timestamp: new Date().toISOString()
+         };
 
-        if (bugDescription && charCount) {
-    bugDescription.addEventListener('input', () => {
-        charCount.textContent = bugDescription.value.length;
-    });
-        }
+         // Create GitHub issue URL for bug report
+         const issueTitle = `[BUG REPORT] ${description.substring(0, 50)}${description.length > 50 ? '...' : ''}`;
+         const issueBody = `## Bug Report
 
-        if (submitBug && bugDescription) {
-    submitBug.addEventListener('click', () => {
-        const description = bugDescription.value.trim();
-        if (description.length < 10) {
-                    showToast('Please provide more details about the bug.', 'warning');
-            return;
-        }
+**Description:** ${description}
 
-                try {
-                    // Create comprehensive bug report
-                    const bugReportData = {
-            description,
-            userAgent: navigator.userAgent,
-            timestamp: new Date().toISOString(),
-                        version: chrome.runtime.getManifest().version,
-                        url: window.location.href,
-                        platform: navigator.platform,
-                        language: navigator.language
-                    };
+**Extension Version:** ${extensionInfo.version}
+**Browser:** ${navigator.userAgent}
+**Date:** ${new Date().toLocaleDateString()}
 
-                    // Store bug report locally for now (can be sent to endpoint later)
-                    chrome.storage.local.get('bugReports', (data) => {
-                        const existingReports = data.bugReports || [];
-                        existingReports.push(bugReportData);
-                        
-                        chrome.storage.local.set({ bugReports: existingReports }, () => {
-                            console.log('Bug Report Stored:', bugReportData);
-                            showToast('Bug report submitted successfully!', 'success');
-        
-        bugModal.classList.remove('active');
-        bugDescription.value = '';
-                            if (charCount) charCount.textContent = '0';
-                        });
-                    });
-                } catch (error) {
-                    console.error('Error submitting bug report:', error);
-                    showToast('Error submitting bug report.', 'error');
-                }
-            });
-        }
-    }
+**Steps to Reproduce:**
+1. 
+2. 
+3. 
+
+**Expected Behavior:**
+
+
+**Actual Behavior:**
+
+
+## Additional Information
+Please provide any additional context or screenshots that might help resolve this issue.
+
+---
+*This bug report was created through the Palestinian Domain Blocker extension.*`;
+
+         const githubIssueUrl = `https://github.com/oussamakou/Palestinian-Domain-Blocker-v2/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}&labels=bug,user-report`;
+
+         // Also store locally as backup
+         const bugReport = {
+             description,
+             ...extensionInfo,
+             timestamp: Date.now(),
+             githubIssueUrl: githubIssueUrl
+         };
+
+         chrome.storage.local.get(['bugReports'], (data) => {
+             const bugReports = data.bugReports || [];
+             bugReports.push(bugReport);
+             chrome.storage.local.set({ bugReports: bugReports }, () => {
+                 // Open GitHub issue creation page
+                 chrome.tabs.create({ url: githubIssueUrl });
+
+                 bugInput.value = '';
+                 showToast('GitHub issue created! Please complete the bug report there.', 'success');
+             });
+         });
+     }
 
     // Statistics functionality
     function updateStatistics() {
@@ -851,7 +850,28 @@ function handleDomainSubmission() {
         return;
     }
     
-    // Create submission object
+    // Create GitHub issue URL for domain submission
+    const issueTitle = `[DOMAIN SUBMISSION] ${domain}`;
+    const issueBody = `## Domain Submission
+
+**Domain:** ${domain}
+**Category:** ${category}
+**Evidence/Source:** ${evidence}
+**Submitted by:** ${submittedBy}
+**Date:** ${new Date().toLocaleDateString()}
+
+## Verification Checklist
+- [ ] Domain verified as active
+- [ ] Evidence links checked
+- [ ] Category appropriate
+- [ ] No duplicate submission
+
+---
+*This submission was created through the Palestinian Domain Blocker extension.*`;
+
+    const githubIssueUrl = `https://github.com/oussamakou/Palestinian-Domain-Blocker-v2/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}&labels=domain-submission,community`;
+
+    // Create submission object for local storage backup
     const submission = {
         domain: domain,
         category: category,
@@ -859,10 +879,11 @@ function handleDomainSubmission() {
         submitted_by: submittedBy,
         date: new Date().toISOString(),
         status: 'pending',
-        id: Date.now() + Math.random()
+        id: Date.now() + Math.random(),
+        githubIssueUrl: githubIssueUrl
     };
     
-    // Save to local storage
+    // Save to local storage as backup
     chrome.storage.local.get(['userSubmissions'], (data) => {
         const submissions = data.userSubmissions || { pending: [], approved: [], rejected: [] };
         submissions.pending.push(submission);
@@ -871,7 +892,10 @@ function handleDomainSubmission() {
             if (chrome.runtime.lastError) {
                 showToast('Error saving submission.', 'error');
             } else {
-                showToast('Domain submitted for review!', 'success');
+                // Open GitHub issue creation page
+                chrome.tabs.create({ url: githubIssueUrl });
+                
+                showToast('GitHub issue created! Please complete the submission there.', 'success');
                 
                 // Clear form
                 domainInput.value = '';
@@ -1133,4 +1157,59 @@ function trackQuickActionClick(text, url) {
             }
         });
     });
+}
+
+// Submit domain functionality
+function submitDomain() {
+    const domain = document.getElementById('submit-domain').value.trim();
+    const category = document.getElementById('submit-category').value;
+    const evidence = document.getElementById('submit-evidence').value.trim();
+    const description = document.getElementById('submit-description').value.trim();
+
+    if (!domain || !category || !evidence || !description) {
+        showToast('Please fill in all required fields', 'error');
+        return;
+    }
+
+    // Create GitHub issue URL for domain submission
+    const issueTitle = `[DOMAIN SUBMISSION] ${domain}`;
+    const issueBody = `## Domain Submission
+
+**Domain:** ${domain}
+**Category:** ${category}
+**Evidence/Source:** ${evidence}
+**Description:** ${description}
+
+**Submitted by:** Community member
+**Date:** ${new Date().toLocaleDateString()}
+
+---
+*This submission was created through the Palestinian Domain Blocker extension.*`;
+
+    const githubIssueUrl = `https://github.com/oussamakou/Palestinian-Domain-Blocker-v2/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}&labels=domain-submission,community`;
+
+    // Also store locally as backup
+    const submission = {
+        domain,
+        category,
+        evidence,
+        description,
+        timestamp: Date.now(),
+        status: 'pending'
+    };
+
+    const submissions = JSON.parse(localStorage.getItem('domainSubmissions') || '[]');
+    submissions.push(submission);
+    localStorage.setItem('domainSubmissions', JSON.stringify(submissions));
+
+    // Open GitHub issue creation page
+    chrome.tabs.create({ url: githubIssueUrl });
+
+    // Clear form
+    document.getElementById('submit-domain').value = '';
+    document.getElementById('submit-evidence').value = '';
+    document.getElementById('submit-description').value = '';
+    
+    showToast('Domain submission created! Please complete the GitHub issue.', 'success');
+    updateStats();
 }
