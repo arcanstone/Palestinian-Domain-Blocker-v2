@@ -863,6 +863,30 @@ function filterCategories(searchTerm) {
 function setupSubmissions() {
     console.log('Setting up submissions...');
     
+    // Check if submit tab exists
+    const submitTab = document.querySelector('[data-tab="submit"]');
+    const submitContent = document.getElementById('submit-content');
+    console.log('Submit tab elements:', {
+        submitTab: !!submitTab,
+        submitContent: !!submitContent
+    });
+    
+    // Add specific click handler for submit tab to ensure it works
+    if (submitTab) {
+        submitTab.addEventListener('click', () => {
+            console.log('Submit tab clicked!');
+            // Ensure the content is visible
+            setTimeout(() => {
+                const btn = document.getElementById('submit-domain-btn');
+                if (btn) {
+                    btn.style.display = 'block';
+                    btn.style.visibility = 'visible';
+                    console.log('Submit button made visible after tab click');
+                }
+            }, 100);
+        });
+    }
+    
     const submitBtn = document.getElementById('submit-domain-btn');
     const evidenceTextarea = document.getElementById('submit-evidence');
     const charCount = document.getElementById('evidence-char-count');
@@ -881,14 +905,30 @@ function setupSubmissions() {
     
     if (submitBtn) {
         console.log('Adding click listener to submit button');
-        submitBtn.addEventListener('click', handleDomainSubmission);
-        
-        // Also add a test click handler to verify it's working
-        submitBtn.addEventListener('click', () => {
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             console.log('Submit button clicked!');
+            handleDomainSubmission();
         });
+        
+        // Make sure button is visible
+        submitBtn.style.display = 'block';
+        submitBtn.style.visibility = 'visible';
+        console.log('Submit button visibility set');
     } else {
         console.error('Submit button not found!');
+        // Try to find it again after a delay
+        setTimeout(() => {
+            const delayedBtn = document.getElementById('submit-domain-btn');
+            if (delayedBtn) {
+                console.log('Found submit button on retry');
+                delayedBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    console.log('Submit button clicked (delayed)!');
+                    handleDomainSubmission();
+                });
+            }
+        }, 1000);
     }
     
     loadUserSubmissions();
