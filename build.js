@@ -89,11 +89,24 @@ function validateExtension() {
         'README.md'
     ];
 
+    const requiredIcons = [
+        'icons/icon16.png',
+        'icons/icon32.png',
+        'icons/icon48.png',
+        'icons/icon128.png'
+    ];
+
     const missingFiles = requiredFiles.filter(file => !fs.existsSync(file));
+    const missingIcons = requiredIcons.filter(file => !fs.existsSync(file));
     
     if (missingFiles.length > 0) {
         log(`ERROR: Missing required files: ${missingFiles.join(', ')}`);
         process.exit(1);
+    }
+
+    if (missingIcons.length > 0) {
+        log(`WARNING: Missing icon files: ${missingIcons.join(', ')}`);
+        log('Extension will work but icons won\'t display properly');
     }
 
     // Validate manifest.json

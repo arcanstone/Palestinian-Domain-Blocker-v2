@@ -24,7 +24,7 @@ A community-driven browser extension supporting Palestinian solidarity through e
 
 ### 🎨 Beautiful Palestinian Design
 - **Authentic Palestinian colors** and cultural elements
-- **Arabic text integration** with proper RTL support
+- **Arabic text integration** - "قاطع المواقع الإسرائيلية" (Boycott Israeli Sites) with proper RTL support
 - **Glass morphism UI** with smooth animations
 - **Responsive design** optimized for all screen sizes
 

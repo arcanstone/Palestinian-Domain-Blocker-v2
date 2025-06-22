@@ -24,7 +24,8 @@
 
 After successful installation, you should see:
 - ✅ Palestinian flag icon in your browser toolbar
-- ✅ Extension popup opens when clicked showing 5 tabs
+- ✅ Extension popup opens with authentic Palestinian design and Arabic text "قاطع المواقع الإسرائيلية" (Boycott Israeli Sites)
+- ✅ All 5 tabs are visible and functional (Blocked, Whitelist, Impact, Categories, Submit)
 - ✅ Blocked domains redirect to the blocked page with alternatives
 - ✅ All functionality works: blocking, whitelisting, impact tracking, submissions
 
