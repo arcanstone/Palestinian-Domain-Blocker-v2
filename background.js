@@ -397,6 +397,24 @@ const preSelectedDomains = [
     "homedepot.com", // Home Depot - Settlement construction supplies
     "lowes.com", // Lowe's - Settlement building materials
     
+    // === ADULT CONTENT COMPANIES ===
+    // Adult entertainment companies with Israeli ownership/operations
+    
+    "brazzers.com", // Brazzers - Adult content platform
+    "pornhub.com", // Pornhub - Adult content platform
+    "redtube.com", // RedTube - Adult content platform
+    "youporn.com", // YouPorn - Adult content platform
+    "tube8.com", // Tube8 - Adult content platform
+    "xtube.com", // Xtube - Adult content platform
+    "digitalplayground.com", // Digital Playground - Adult content studio
+    "men.com", // Men.com - Adult content platform
+    "mofos.com", // Mofos - Adult content studio
+    "nutaku.com", // Nutaku - Adult gaming platform
+    "realitykings.com", // Reality Kings - Adult content studio
+    "seancody.com", // Sean Cody - Adult content studio
+    "twistys.com", // Twistys - Adult content studio
+    "whynotbi.com", // WhyNotBi.com - Adult content platform
+    
     // === ISRAELI INVESTMENT FIRMS & FUNDS ===
     // VCs and investment firms primarily funding Israeli startups
     
@@ -913,7 +931,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // On installation, set up the pre-selected domains
 chrome.runtime.onInstalled.addListener(() => {
-    
+
 
     chrome.storage.local.get(["blockedDomains", "whitelistedDomains"], (data) => {
         let blockedDomains = data.blockedDomains || [];

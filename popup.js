@@ -19,11 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             safeExecute(() => {
-                tabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
                 const targetContent = document.getElementById(`${tab.dataset.tab}-content`);
                 if (targetContent) {
                     targetContent.classList.add('active');
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             toast.classList.remove('show');
             setTimeout(() => {
                 if (toast.parentNode) {
-                    toast.remove();
+            toast.remove();
                 }
                 processToastQueue();
             }, 300);
@@ -591,24 +591,24 @@ function setupBugReporting() {
         
         bugReportBtn.addEventListener('click', () => {
             
-            bugModal.classList.add('active');
-        });
+        bugModal.classList.add('active');
+    });
     } else {
-        
+
     }
 
     if (modalClose && bugModal) {
-        modalClose.addEventListener('click', () => {
-            bugModal.classList.remove('active');
+    modalClose.addEventListener('click', () => {
+        bugModal.classList.remove('active');
             if (bugDescription) bugDescription.value = '';
             if (charCount) charCount.textContent = '0';
-        });
+    });
     }
 
     if (bugDescription && charCount) {
-        bugDescription.addEventListener('input', () => {
-            charCount.textContent = bugDescription.value.length;
-        });
+    bugDescription.addEventListener('input', () => {
+        charCount.textContent = bugDescription.value.length;
+    });
     }
 
     if (submitBugBtn) {
@@ -629,10 +629,10 @@ function handleBugReport() {
         return;
     }
 
-    if (description.length < 10) {
+        if (description.length < 10) {
         showToast('Please provide more details about the bug.', 'error');
-        return;
-    }
+            return;
+        }
 
     // Get extension info for bug report
     const extensionInfo = {
@@ -671,8 +671,8 @@ Please provide any additional context or screenshots that might help resolve thi
     const githubIssueUrl = `https://github.com/oussamakou/Palestinian-Domain-Blocker-v2/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}&labels=bug,user-report`;
 
     // Also store locally as backup
-    const bugReport = {
-        description,
+        const bugReport = {
+            description,
         ...extensionInfo,
         timestamp: Date.now(),
         githubIssueUrl: githubIssueUrl
@@ -733,7 +733,7 @@ Please provide any additional context or screenshots that might help resolve thi
         
         // Escape to close modals
         if (e.key === 'Escape' && bugModal && bugModal.classList.contains('active')) {
-            bugModal.classList.remove('active');
+        bugModal.classList.remove('active');
         }
     });
 
@@ -799,6 +799,7 @@ function categorizeBlockedDomains(domains) {
         'settlement_hospitality': [],
         'settlement_food': [],
         'investment_vc': [],
+        'adult_content': [],
         'other': []
     };
     
@@ -824,6 +825,8 @@ function categorizeBlockedDomains(domains) {
             categories.settlement_food.push(domain);
         } else if (['sequoiacap.com', 'a16z.com', 'kleinerperkins.com'].includes(normalizedDomain)) {
             categories.investment_vc.push(domain);
+        } else if (['brazzers.com', 'pornhub.com', 'redtube.com', 'youporn.com', 'tube8.com', 'xtube.com', 'digitalplayground.com', 'men.com', 'mofos.com', 'nutaku.com', 'realitykings.com', 'seancody.com', 'twistys.com', 'whynotbi.com'].includes(normalizedDomain)) {
+            categories.adult_content.push(domain);
         } else {
             categories.other.push(domain);
         }
@@ -848,6 +851,7 @@ function displayCategorizedDomains(categories) {
         'settlement_hospitality': '🏨 Hotels in Illegal Settlements',
         'settlement_food': '🍔 Food Companies with Settlement Operations',
         'investment_vc': '💰 Venture Capital with Israeli Portfolios',
+        'adult_content': '🔞 Adult Content Companies',
         'other': '❓ Other Companies'
     };
     
