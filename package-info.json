@@ -1,0 +1,24 @@
+{
+  "name": "Palestinian Domain Blocker",
+  "version": "2.0.0",
+  "description": "Production-ready browser extension for Palestinian solidarity",
+  "buildDate": "2025-08-04T23:00:26.747Z",
+  "files": [
+    "manifest.json",
+    "background.js",
+    "popup.html",
+    "popup.js",
+    "blocked.html",
+    "blocked.js",
+    "README.md"
+  ],
+  "installation": {
+    "chrome": "Load unpacked extension in Developer Mode",
+    "edge": "Load unpacked extension in Developer Mode",
+    "firefox": "Load temporary add-on"
+  },
+  "support": {
+    "github": "https://github.com/arcanstone/Palestinian-Domain-Blocker-v2",
+    "issues": "https://github.com/arcanstone/Palestinian-Domain-Blocker-v2/issues"
+  }
+}

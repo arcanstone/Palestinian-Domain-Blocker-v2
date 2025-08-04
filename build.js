@@ -143,8 +143,8 @@ function createDistributionPackage() {
             firefox: 'Load temporary add-on'
         },
         support: {
-            github: 'https://github.com/oussamakou/Palestinian-Domain-Blocker-v2',
-            issues: 'https://github.com/oussamakou/Palestinian-Domain-Blocker-v2/issues'
+            github: 'https://github.com/arcanstone/Palestinian-Domain-Blocker-v2',
+            issues: 'https://github.com/arcanstone/Palestinian-Domain-Blocker-v2/issues'
         }
     };
 
@@ -184,8 +184,8 @@ After installation, you should see:
 
 ## Support
 
-- GitHub: https://github.com/oussamakou/Palestinian-Domain-Blocker-v2
-- Issues: https://github.com/oussamakou/Palestinian-Domain-Blocker-v2/issues
+- GitHub: https://github.com/arcanstone/Palestinian-Domain-Blocker-v2
+- Issues: https://github.com/arcanstone/Palestinian-Domain-Blocker-v2/issues
 
 Built with ❤️ for Palestinian solidarity
 `;

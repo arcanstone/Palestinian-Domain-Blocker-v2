@@ -1,0 +1,32 @@
+{
+  "name": "palestinian-domain-blocker",
+  "version": "2.0.0",
+  "description": "Community-driven domain blocking extension supporting Palestinian solidarity through ethical boycotts",
+  "main": "background.js",
+  "scripts": {
+    "build": "node build.js",
+    "test": "echo \"No tests specified\" && exit 0",
+    "zip": "node -e \"const fs=require('fs'); const path=require('path'); const archiver=require('archiver'); const output=fs.createWriteStream('palestinian-domain-blocker-v2.0.0.zip'); const archive=archiver('zip'); output.on('close',()=>console.log('Extension packaged successfully!')); archive.on('error',err=>{throw err;}); archive.pipe(output); const files=['manifest.json','background.js','popup.html','popup.js','blocked.html','blocked.js','icons/']; files.forEach(file=>{if(fs.existsSync(file)){if(fs.statSync(file).isDirectory()){archive.directory(file,file);}else{archive.file(file,{name:file});}}else{console.warn('Missing file:',file);}}); archive.finalize();\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arcanstone/Palestinian-Domain-Blocker-v2.git"
+  },
+  "keywords": [
+    "palestinian",
+    "solidarity",
+    "boycott",
+    "browser-extension",
+    "chrome-extension",
+    "domain-blocker"
+  ],
+  "author": "Palestinian Solidarity Community",
+  "license": "MIT",
+  "homepage": "https://github.com/arcanstone/Palestinian-Domain-Blocker-v2",
+  "bugs": {
+    "url": "https://github.com/arcanstone/Palestinian-Domain-Blocker-v2/issues"
+  },
+  "devDependencies": {
+    "archiver": "^5.3.1"
+  }
+}
