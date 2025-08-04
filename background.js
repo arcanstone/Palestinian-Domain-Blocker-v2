@@ -651,22 +651,34 @@ chrome.runtime.onInstalled.addListener(() => {
     initializeImpactTracking();
     scheduleRegularUpdates();
 });
-chrome.runtime.onInstalled.addListener(() => {
+function initializeBlockedDomains() {
     chrome.storage.local.get(["blockedDomains", "whitelistedDomains"], (data) => {
         let blockedDomains = data.blockedDomains || [];
         let whitelistedDomains = data.whitelistedDomains || [];
+        let domainsAdded = false;
         preSelectedDomains.forEach((domain) => {
             if (!blockedDomains.includes(domain)) {
                 blockedDomains.push(domain);
+                domainsAdded = true;
             }
         });
-        chrome.storage.local.set({ 
-            blockedDomains, 
-            whitelistedDomains 
-        }, () => {
+        if (domainsAdded || blockedDomains.length === 0) {
+            chrome.storage.local.set({ 
+                blockedDomains, 
+                whitelistedDomains 
+            }, () => {
+                updateBlockingRules(blockedDomains, whitelistedDomains);
+            });
+        } else {
             updateBlockingRules(blockedDomains, whitelistedDomains);
-        });
+        }
     });
+}
+chrome.runtime.onInstalled.addListener(() => {
+    initializeBlockedDomains();
+});
+chrome.runtime.onStartup.addListener(() => {
+    initializeBlockedDomains();
 });
 chrome.storage.onChanged.addListener((changes, namespace) => {
     if (changes.blockedDomains || changes.whitelistedDomains) {
@@ -706,18 +718,4 @@ function updateBlockingRules(blockedDomains, whitelistedDomains = []) {
     } catch (error) {
     }
 }
-chrome.storage.local.get(["blockedDomains", "whitelistedDomains"], (data) => {
-    try {
-    const blockedDomains = data.blockedDomains || [];
-        const whitelistedDomains = data.whitelistedDomains || [];
-        updateBlockingRules(blockedDomains, whitelistedDomains);
-    } catch (error) {
-    }
-});
-chrome.runtime.onStartup.addListener(() => {
-    chrome.storage.local.get(["blockedDomains", "whitelistedDomains"], (data) => {
-        const blockedDomains = data.blockedDomains || [];
-        const whitelistedDomains = data.whitelistedDomains || [];
-        updateBlockingRules(blockedDomains, whitelistedDomains);
-    });
-});
+initializeBlockedDomains();
