@@ -14,6 +14,7 @@ function createZip() {
         'popup.js', 
         'blocked.html',
         'blocked.js',
+        'chrome-warning.html',
         'README.md',
         'INSTALL.md',
         'QUICK-INSTALL.md',
