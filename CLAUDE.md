@@ -34,6 +34,16 @@ Required files for a valid build:
 - manifest.json, background.js, popup.html, popup.js, blocked.html, blocked.js, README.md
 - Icon files: icons/icon16.png, icons/icon32.png, icons/icon48.png, icons/icon128.png
 
+## Code Organization Principles
+
+When working on this codebase, always maintain good code organization:
+
+- **Separate concerns**: Move complex data structures (like pixel font matrices) into dedicated files
+- **Keep code files focused**: Main logic files should not be cluttered with large data structures
+- **Use meaningful file names**: Files like `pixel-fonts.js` clearly indicate their purpose
+- **Maintain modularity**: Components should be easily testable and reusable
+- **Document dependencies**: Update manifests and HTML when adding new script files
+
 ## Architecture
 
 ### Dual Browser Support
@@ -176,3 +186,59 @@ Tag pattern: v[major].[minor].[patch]
 - [ ] Check for console errors or broken functionality
 - [ ] Test with different domain variations (www vs non-www)
 - [ ] Ensure extension icon displays correctly
+
+## Recent Development Session Progress (Session ending before 2pm token reset)
+
+### Dinosaur Game Improvements Completed
+The `dino-game.js` file has been significantly enhanced:
+
+1. **Chrome Dinosaur Integration**: 
+   - Replaced gray square with actual Chrome dinosaur sprite
+   - Using `google-example/google-chrome-guess-the-font-dinosaur-game-nvidia-shield-chrome-2624772108-removebg-preview.png`
+   - Dinosaur now appears as 40x40 pixel sprite (increased from 20x20)
+
+2. **Running Animation**: 
+   - Added smooth bobbing animation when dinosaur runs
+   - Uses sine wave: `Math.sin(this.dino.animationFrame * 0.15) * 1`
+   - Animation only occurs when grounded and game running
+
+3. **Jump Physics Tuning**:
+   - **Current values**: jumpPower: 1, gravity: 0.04
+   - **Issue**: User reports jump is still too fast despite multiple reductions
+   - **History**: Started at jumpPower:15/gravity:0.8, reduced through 12/0.5, 8/0.3, 4/0.15, 2/0.08, to current 1/0.04
+   - **Next session priority**: Continue reducing jump physics until satisfactory
+
+4. **Collision Detection**:
+   - Added padding for more accurate collisions (dino: 4px, obstacles: 2px padding)
+   - Accounts for animation offset in collision calculations
+   - Collision detection matches rendering animation
+
+### Popup Interface Improvements Completed
+The extension popup has been streamlined:
+
+1. **Removed "Allowed Domains" Tab**: 
+   - Eliminated redundant functionality (domains are allowed by default if not blocked)
+   - Kept whitelist functionality in background code
+
+2. **Simplified Interface**: 
+   - Removed tab system entirely 
+   - Add domain input now immediately visible at popup open
+   - Search and domain list displayed below
+
+3. **Visual Improvements**:
+   - Added thin horizontal separator between add section and search section
+   - Unified font to 'Roboto Mono' for both text inputs
+   - Removed unnecessary section labels - button/input text is self explanatory
+
+### Files Modified This Session
+- `dino-game.js` - Major enhancements to game mechanics and visuals
+- `popup.html` - Interface simplification and visual improvements  
+- `popup.js` - Removed tab switching logic, simplified domain handling
+
+### Next Session TODO (After 2pm reset)
+1. **PRIORITY**: Continue reducing dinosaur jump physics until user satisfied
+   - Try jumpPower: 0.5, gravity: 0.02 or even smaller values
+   - May need to go as low as jumpPower: 0.3, gravity: 0.01
+2. Test final game mechanics and collision detection
+3. Consider any additional UI polish requests
+4. Prepare for potential Mozilla submission if all issues resolved

@@ -1,24 +1,24 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Palestinian Domain Blocker",
-  "version": "3.1.2",
+  "version": "3.1.3",
   "description": "Community-driven domain blocking extension supporting Palestinian solidarity through ethical boycotts. Block Israeli domains and companies complicit in occupation.",
   "author": "Palestinian Solidarity Community",
   "homepage_url": "https://github.com/arcanstone/Palestinian-Domain-Blocker-v2",
   "permissions": [
-    "declarativeNetRequest",
-    "declarativeNetRequestWithHostAccess",
+    "webRequest",
+    "webRequestBlocking",
     "storage",
     "tabs",
-    "webNavigation"
+    "<all_urls>"
   ],
   "background": {
-    "service_worker": "background.js"
+    "scripts": [
+      "background-firefox.js"
+    ],
+    "persistent": true
   },
-  "host_permissions": [
-    "*://*/*"
-  ],
-  "action": {
+  "browser_action": {
     "default_popup": "popup.html",
     "default_title": "Palestinian Domain Blocker",
     "default_icon": {
@@ -35,19 +35,19 @@
     "128": "icons/icon128.png"
   },
   "web_accessible_resources": [
-    {
-      "resources": [
-        "blocked.html",
-        "blocked.js",
-        "chrome-warning.html"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
-    }
+    "blocked.html",
+    "blocked.js",
+    "dino-game.js",
+    "pixel-fonts.js",
+    "chrome-warning.html",
+    "google-example/bw_tank-removebg-preview.png",
+    "google-example/google-chrome-guess-the-font-dinosaur-game-nvidia-shield-chrome-2624772108-removebg-preview.png"
   ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
-  },
-  "minimum_chrome_version": "88"
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "palestinian-domain-blocker@solidarity.org",
+      "strict_min_version": "90.0"
+    }
+  }
 }

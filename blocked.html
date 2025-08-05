@@ -13,120 +13,187 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background-color: #f8f9fa;
-            color: #212529;
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            background-color: #fff;
+            color: #202124;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            line-height: 1.5;
+            line-height: 1.4;
+            padding: 24px;
         }
 
         .container {
-            max-width: 500px;
-            padding: 40px 30px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 650px;
+            width: 100%;
             text-align: center;
         }
 
         h1 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #dc3545;
+            font-size: 32px;
+            font-weight: 400;
+            color: #202124;
             margin-bottom: 16px;
+            font-family: Roboto, Arial, sans-serif;
+            text-align: left;
+            max-width: 500px;
+            margin-left: 0;
+            margin-right: auto;
         }
 
         .blocked-domain {
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            background-color: #f8f9fa;
-            padding: 12px 16px;
-            border-radius: 4px;
-            border-left: 4px solid #dc3545;
-            margin: 20px 0;
-            word-break: break-all;
+            font-family: Roboto, Arial, sans-serif;
             font-size: 14px;
+            color: #70757a;
+            margin: 4px auto 20px;
+            max-width: 500px;
+            margin-left: 0;
+            text-align: left;
+            padding-left: 0;
+        }
+
+        .try-section {
+            max-width: 500px;
+            margin: 20px auto;
+            margin-left: 0;
+            text-align: left;
+        }
+
+        .try-title {
+            font-size: 16px;
+            font-weight: 400;
+            color: #202124;
+            margin-bottom: 16px;
+            font-family: Roboto, Arial, sans-serif;
         }
 
         .alternative {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 6px;
-            border-left: 4px solid #28a745;
+            margin-top: 0;
+            padding: 0;
+            background: none;
+            border: none;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
         }
 
-        .alternative-title {
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #495057;
+        .suggestion-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            margin-left: 16px;
+            font-size: 14px;
+            color: #202124;
+            font-family: Roboto, Arial, sans-serif;
+        }
+
+        .suggestion-bullet {
+            margin-right: 12px;
+            margin-top: 6px;
+            width: 4px;
+            height: 4px;
+            background-color: #202124;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
         .alternative-link {
-            display: inline-block;
-            color: #007bff;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 8px 16px;
-            border: 1px solid #007bff;
-            border-radius: 4px;
-            transition: all 0.2s ease;
+            color: #1a0dab;
+            text-decoration: underline;
+            font-weight: 400;
         }
 
         .alternative-link:hover {
-            background-color: #007bff;
-            color: white;
+            text-decoration: none;
         }
 
-        .description {
-            margin-top: 16px;
-            font-size: 14px;
-            color: #6c757d;
+        .error-code {
+            font-size: 13px;
+            color: #70757a;
+            font-family: Roboto, Arial, sans-serif;
+            margin-top: 8px;
+            max-width: 500px;
+            margin-left: 0;
+            margin-right: auto;
+            text-align: left;
         }
 
-        .back-button {
-            margin-top: 30px;
+        .game-container {
+            margin: 0 auto 40px;
+            text-align: center;
+            width: 100%;
+            position: relative;
         }
 
-        .back-button button {
-            background-color: #6c757d;
-            color: white;
+        #gameCanvas {
             border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            background-color: #fff;
             cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.2s ease;
+            max-width: 100%;
+            height: auto;
         }
 
-        .back-button button:hover {
-            background-color: #5a6268;
+        .game-scores {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: none; /* Hidden - scores now rendered on canvas */
+            gap: 16px;
+            font-size: 14px;
+            color: #535353;
+            font-weight: 400;
+            font-family: 'Roboto Mono', monospace;
+            z-index: 10;
         }
+
+        .high-score, .current-score {
+            font-size: 14px;
+            color: #535353;
+            font-weight: 400;
+            font-family: 'Roboto Mono', monospace;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Site Blocked</h1>
+        <div class="game-container">
+            <canvas id="gameCanvas" width="650" height="150"></canvas>
+            <div class="game-scores">
+                <div class="high-score" id="highScore">HI 00000</div>
+                <div class="current-score" id="gameScore">00000</div>
+            </div>
+        </div>
+
+        <h1 id="main-title">Site Blocked</h1>
         
         <div class="blocked-domain" id="blocked-domain">
             Loading...
         </div>
-        
-        <div class="alternative" id="alternative-section" style="display: none;">
-            <div class="alternative-title">Alternative Available</div>
-            <a href="#" class="alternative-link" id="alternative-link" target="_blank">
-                Visit Alternative
-            </a>
-            <div class="description" id="alternative-description"></div>
+
+        <div class="try-section">
+            <div class="try-title">Try:</div>
+            <div class="alternative" id="alternative-section" style="display: none;">
+                <div class="suggestion-item">
+                    <div class="suggestion-bullet"></div>
+                    <div>
+                        <a href="#" class="alternative-link" id="alternative-link" target="_blank">Visit Alternative</a>
+                        <div id="alternative-description" style="margin-top: 4px; color: #70757a; font-size: 14px;"></div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="back-button">
-            <button onclick="history.back()">Go Back</button>
+        <div class="error-code" id="error-code">
+            ERR_SITE_BLOCKED
         </div>
     </div>
 
+    <script src="pixel-fonts.js"></script>
     <script src="blocked.js"></script>
+    <script src="dino-game.js"></script>
 </body>
 </html>

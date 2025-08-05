@@ -5,12 +5,6 @@ document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
 });
 function setupEventListeners() {
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            const tabName = tab.dataset.tab;
-            switchTab(tabName);
-        });
-    });
     document.getElementById('add-blocked').addEventListener('click', addBlockedDomain);
     document.getElementById('domain-input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') addBlockedDomain();
@@ -18,34 +12,17 @@ function setupEventListeners() {
     document.getElementById('blocked-search').addEventListener('input', (e) => {
         filterDomains('blocked', e.target.value);
     });
-    document.getElementById('allowed-search').addEventListener('input', (e) => {
-        filterDomains('allowed', e.target.value);
-    });
-}
-function switchTab(tabName) {
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-    });
-    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-    });
-    document.getElementById(`${tabName}-tab`).classList.add('active');
 }
 function loadDomainCounts() {
-    chrome.storage.local.get(['blockedDomains', 'whitelistedDomains'], (data) => {
+    chrome.storage.local.get(['blockedDomains'], (data) => {
         const blockedCount = (data.blockedDomains || []).length;
-        const allowedCount = (data.whitelistedDomains || []).length;
         document.getElementById('blocked-count').textContent = blockedCount;
-        document.getElementById('whitelisted-count').textContent = allowedCount;
     });
 }
 function loadDomainLists() {
-    chrome.storage.local.get(['blockedDomains', 'whitelistedDomains'], (data) => {
+    chrome.storage.local.get(['blockedDomains'], (data) => {
         const blockedDomains = data.blockedDomains || [];
-        const allowedDomains = data.whitelistedDomains || [];
         displayDomains('blocked', blockedDomains);
-        displayDomains('allowed', allowedDomains);
     });
 }
 function displayDomains(type, domains) {
@@ -84,28 +61,25 @@ function addBlockedDomain() {
             input.value = '';
             loadDomainCounts();
             loadDomainLists();
-            switchTab('blocked');
         });
     });
 }
 function removeDomain(type, domain) {
-    const storageKey = type === 'blocked' ? 'blockedDomains' : 'whitelistedDomains';
-    chrome.storage.local.get([storageKey], (data) => {
-        const domains = data[storageKey] || [];
+    chrome.storage.local.get(['blockedDomains'], (data) => {
+        const domains = data.blockedDomains || [];
         const updatedDomains = domains.filter(d => d !== domain);
-        chrome.storage.local.set({ [storageKey]: updatedDomains }, () => {
+        chrome.storage.local.set({ blockedDomains: updatedDomains }, () => {
             loadDomainCounts();
             loadDomainLists();
         });
     });
 }
 function filterDomains(type, searchTerm) {
-    const storageKey = type === 'blocked' ? 'blockedDomains' : 'whitelistedDomains';
-    chrome.storage.local.get([storageKey], (data) => {
-        const allDomains = data[storageKey] || [];
+    chrome.storage.local.get(['blockedDomains'], (data) => {
+        const allDomains = data.blockedDomains || [];
         const filteredDomains = allDomains.filter(domain => 
             domain.toLowerCase().includes(searchTerm.toLowerCase())
         );
-        displayDomains(type, filteredDomains);
+        displayDomains('blocked', filteredDomains);
     });
 }

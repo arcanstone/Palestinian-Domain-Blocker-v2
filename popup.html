@@ -13,22 +13,22 @@
 
         body {
             width: 350px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
             background-color: #ffffff;
-            color: #333333;
+            color: #202124;
             line-height: 1.4;
         }
 
         .header {
             padding: 16px 20px;
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
+            background-color: #ffffff;
+            border-bottom: 1px solid #dadce0;
         }
 
         .header h1 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #495057;
+            font-size: 18px;
+            font-weight: 400;
+            color: #202124;
         }
 
         .content {
@@ -41,7 +41,8 @@
             margin-bottom: 20px;
             padding: 12px;
             background-color: #f8f9fa;
-            border-radius: 6px;
+            border-radius: 8px;
+            border: 1px solid #dadce0;
         }
 
         .stat {
@@ -50,42 +51,45 @@
 
         .stat-number {
             font-size: 18px;
-            font-weight: 600;
-            color: #dc3545;
+            font-weight: 400;
+            color: #5f6368;
         }
 
         .stat-label {
             font-size: 12px;
-            color: #6c757d;
+            color: #5f6368;
             margin-top: 2px;
+            font-family: Roboto, Arial, sans-serif;
         }
 
         .tabs {
             display: flex;
             margin-bottom: 16px;
-            border-bottom: 1px solid #e9ecef;
+            border-bottom: 1px solid #dadce0;
         }
 
         .tab {
             flex: 1;
-            padding: 8px 12px;
+            padding: 12px 16px;
             text-align: center;
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 13px;
-            color: #6c757d;
+            font-size: 14px;
+            color: #5f6368;
             border-bottom: 2px solid transparent;
             transition: all 0.2s ease;
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            font-weight: 400;
         }
 
         .tab.active {
-            color: #495057;
-            border-bottom-color: #007bff;
+            color: #1a73e8;
+            border-bottom-color: #1a73e8;
         }
 
         .tab:hover {
-            color: #495057;
+            color: #202124;
         }
 
         .tab-content {
@@ -99,15 +103,16 @@
         .domain-list {
             max-height: 200px;
             overflow-y: auto;
+            padding-right: 16px;
         }
 
         .domain-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 0;
+            padding: 12px 0;
             border-bottom: 1px solid #f1f3f4;
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .domain-item:last-child {
@@ -115,8 +120,9 @@
         }
 
         .domain-name {
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-            color: #495057;
+            font-family: 'Roboto Mono', monospace;
+            color: #202124;
+            font-size: 13px;
         }
 
         .domain-actions {
@@ -125,26 +131,29 @@
         }
 
         .btn {
-            padding: 4px 8px;
-            border: 1px solid #dee2e6;
+            padding: 6px 12px;
+            border: 1px solid #dadce0;
             background: white;
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 11px;
-            transition: all 0.2s ease;
+            font-size: 12px;
+            transition: all 0.15s ease;
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            font-weight: 400;
         }
 
         .btn:hover {
             background-color: #f8f9fa;
+            border-color: #70757a;
         }
 
         .btn-remove {
-            color: #dc3545;
-            border-color: #dc3545;
+            color: #5f6368;
+            border-color: #5f6368;
         }
 
         .btn-remove:hover {
-            background-color: #dc3545;
+            background-color: #5f6368;
             color: white;
         }
 
@@ -154,53 +163,65 @@
 
         .add-domain input {
             width: 100%;
-            padding: 8px 12px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 13px;
-            margin-bottom: 8px;
+            padding: 12px 16px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 12px;
+            font-family: 'Roboto Mono', monospace;
         }
 
         .add-domain input:focus {
             outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 1px #1a73e8;
         }
 
         .btn-primary {
-            background-color: #007bff;
+            background-color: #1a73e8;
             color: white;
-            border: 1px solid #007bff;
-            padding: 6px 12px;
-            border-radius: 4px;
+            border: 1px solid #1a73e8;
+            padding: 12px 24px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
             width: 100%;
+            font-family: 'Google Sans', Roboto, Arial, sans-serif;
+            font-weight: 500;
         }
 
         .btn-primary:hover {
-            background-color: #0056b3;
+            background-color: #1557b0;
         }
 
         .empty-state {
             text-align: center;
-            color: #6c757d;
-            font-size: 13px;
-            padding: 20px;
+            color: #5f6368;
+            font-size: 14px;
+            padding: 24px;
+            font-family: Roboto, Arial, sans-serif;
         }
 
         .search-input {
             width: 100%;
-            padding: 6px 10px;
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            font-size: 12px;
-            margin-bottom: 12px;
+            padding: 8px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            font-family: 'Roboto Mono', monospace;
         }
 
         .search-input:focus {
             outline: none;
-            border-color: #007bff;
+            border-color: #1a73e8;
+            box-shadow: 0 0 0 1px #1a73e8;
+        }
+
+        .separator {
+            height: 1px;
+            background-color: #e8eaed;
+            margin: 20px 0;
         }
     </style>
 </head>
@@ -210,41 +231,19 @@
     </div>
 
     <div class="content">
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-number" id="blocked-count">0</div>
-                <div class="stat-label">Blocked</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number" id="whitelisted-count">0</div>
-                <div class="stat-label">Allowed</div>
+        <div class="add-domain">
+            <div class="input-group">
+                <input type="text" placeholder="Enter domain (e.g., example.com)" id="domain-input">
+                <button class="btn-primary" id="add-blocked">Add to Blocked</button>
             </div>
         </div>
-
-        <div class="tabs">
-            <button class="tab active" data-tab="blocked">Blocked</button>
-            <button class="tab" data-tab="allowed">Allowed</button>
-            <button class="tab" data-tab="add">Add</button>
-        </div>
-
-        <div class="tab-content active" id="blocked-tab">
+        
+        <div class="separator"></div>
+        
+        <div class="search-section">
             <input type="text" class="search-input" placeholder="Search blocked domains..." id="blocked-search">
             <div class="domain-list" id="blocked-list">
                 <div class="empty-state">No blocked domains</div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="allowed-tab">
-            <input type="text" class="search-input" placeholder="Search allowed domains..." id="allowed-search">
-            <div class="domain-list" id="allowed-list">
-                <div class="empty-state">No allowed domains</div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="add-tab">
-            <div class="add-domain">
-                <input type="text" placeholder="Enter domain (e.g., example.com)" id="domain-input">
-                <button class="btn-primary" id="add-blocked">Add to Blocked</button>
             </div>
         </div>
     </div>

@@ -1,19 +1,20 @@
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const blockedDomain = urlParams.get('domain') || extractDomainFromReferrer() || extractDomainFromCurrentUrl() || 'unknown domain';
-    
-    // Update the blocked domain display
     const domainEl = document.getElementById('blocked-domain');
-    if (domainEl) {
+    const titleEl = document.getElementById('main-title');
+    if (domainEl && titleEl) {
+        titleEl.textContent = `${blockedDomain} blocked`;
         domainEl.textContent = blockedDomain;
         document.title = `${blockedDomain} - Site Blocked`;
     }
-    
-    // Load alternative recommendation
     loadAlternativeRecommendation(blockedDomain);
     updateImpactOnBlock(blockedDomain);
     loadPersonalImpactStats();
     trackBlockEvent(blockedDomain);
+    if (typeof initDinosaurGame === 'function') {
+        initDinosaurGame();
+    }
 });
 function extractDomainFromReferrer() {
     try {
@@ -42,8 +43,6 @@ function extractDomainFromCurrentUrl() {
 }
 function loadAlternativeRecommendation(domain) {
     if (!domain) return;
-    
-    // Try to get alternative from background script
     if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
         try {
             chrome.runtime.sendMessage({
@@ -64,11 +63,9 @@ function loadAlternativeRecommendation(domain) {
             showLocalAlternative(domain);
         }
     } else {
-        // Fallback for Firefox or when runtime is not available
         showLocalAlternative(domain);
     }
 }
-
 function showLocalAlternative(domain) {
     const alternative = getLocalAlternative(domain);
     if (alternative) {
@@ -76,7 +73,7 @@ function showLocalAlternative(domain) {
     }
 }
 function getLocalAlternative(domain) {
-    const normalizedDomain = domain.replace(/^www\./, '');
+    const normalizedDomain = domain.replace(/^www\./, '').toLowerCase();
     const localAlternatives = {
         "google.com": {
             name: "DuckDuckGo",
@@ -112,9 +109,58 @@ function getLocalAlternative(domain) {
             name: "Local Libraries",
             url: "https://www.worldcat.org",
             description: "Borrow movies and shows from your local library"
+        },
+        "blackrock.com": {
+            name: "Credit Unions",
+            url: "https://www.ncua.gov/consumers/consumer-assistance-resources/find-credit-union",
+            description: "Find local credit unions that support community investment"
+        },
+        "vanguard.com": {
+            name: "ESG Investment Platforms",
+            url: "https://www.ethicalmarkets.com",
+            description: "Explore ethical and sustainable investment options"
+        },
+        "jpmorgan.com": {
+            name: "Community Banks",
+            url: "https://www.icba.org/bank-locator",
+            description: "Support local community banks"
+        },
+        "lockheedmartin.com": {
+            name: "Peace Organizations",
+            url: "https://www.peacedirectory.org",
+            description: "Directory of peace and anti-war organizations"
+        },
+        "boeing.com": {
+            name: "Sustainable Transport",
+            url: "https://www.itdp.org",
+            description: "Institute for Transportation and Development Policy"
+        },
+        "microsoft.com": {
+            name: "Open Source Alternatives",
+            url: "https://www.libreoffice.org",
+            description: "Free and open source office suite"
+        },
+        "intel.com": {
+            name: "Tech Ethics Resources",
+            url: "https://www.eff.org",
+            description: "Electronic Frontier Foundation - digital rights advocacy"
+        },
+        "caterpillar.com": {
+            name: "Ethical Construction",
+            url: "https://www.greenbuilding.com",
+            description: "Sustainable construction and green building resources"
         }
     };
-    return localAlternatives[normalizedDomain] || {
+    let foundAlternative = localAlternatives[normalizedDomain];
+    if (!foundAlternative) {
+        for (const [key, value] of Object.entries(localAlternatives)) {
+            if (normalizedDomain.includes(key.replace('.com', '')) || key.includes(normalizedDomain.replace('.com', ''))) {
+                foundAlternative = value;
+                break;
+            }
+        }
+    }
+    return foundAlternative || {
         name: "Ethical Alternatives",
         url: "https://ethical.net",
         description: "Find ethical alternatives to mainstream services"
@@ -124,70 +170,13 @@ function showAlternative(alternative) {
     const alternativeSection = document.getElementById('alternative-section');
     const alternativeDescription = document.getElementById('alternative-description');
     const alternativeLink = document.getElementById('alternative-link');
-    
     if (alternativeSection && alternativeDescription && alternativeLink) {
         alternativeLink.textContent = alternative.name;
         alternativeLink.href = alternative.url;
         alternativeDescription.textContent = alternative.description;
         alternativeSection.style.display = 'block';
-        
         alternativeLink.addEventListener('click', () => {
             trackAlternativeClick(alternative.name);
-        });
-        if (shouldAutoRedirect(alternative)) {
-            addAutoRedirectOption(alternative);
-        }
-    }
-}
-function shouldAutoRedirect(alternative) {
-    const autoRedirectAlternatives = [
-        'DuckDuckGo', 'ProtonMail', 'Mastodon', 'Signal', 'LibreOffice', 
-        'PeerTube', 'Pixelfed', 'Matrix', 'Lemmy', 'Bandcamp', 'Wise (TransferWise)'
-    ];
-    return autoRedirectAlternatives.includes(alternative.name);
-}
-function addAutoRedirectOption(alternative) {
-    const alternativeSection = document.getElementById('alternative-section');
-    if (!alternativeSection) return;
-    const redirectInfo = document.createElement('div');
-    redirectInfo.style.cssText = `
-        margin-top: 15px;
-        padding: 10px;
-        background: rgba(76, 175, 80, 0.2);
-        border-radius: 8px;
-        text-align: center;
-        font-size: 14px;
-    `;
-    let countdown = 10;
-    redirectInfo.innerHTML = `
-        <p>🚀 Auto-redirecting to <strong>${alternative.name}</strong> in <span id="redirect-countdown">${countdown}</span> seconds</p>
-        <button id="redirect-now" style="margin: 5px; padding: 8px 16px; background: var(--accent-green); color: white; border: none; border-radius: 6px; cursor: pointer;">Go Now</button>
-        <button id="cancel-redirect" style="margin: 5px; padding: 8px 16px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 6px; cursor: pointer;">Cancel</button>
-    `;
-    alternativeSection.appendChild(redirectInfo);
-const timer = setInterval(() => {
-        countdown--;
-        const countdownEl = document.getElementById('redirect-countdown');
-        if (countdownEl) countdownEl.textContent = countdown;
-        if (countdown <= 0) {
-            clearInterval(timer);
-            trackAlternativeClick(alternative.name);
-            window.location.href = alternative.url;
-        }
-    }, 1000);
-    const redirectNowBtn = document.getElementById('redirect-now');
-    if (redirectNowBtn) {
-        redirectNowBtn.addEventListener('click', () => {
-            clearInterval(timer);
-            trackAlternativeClick(alternative.name);
-            window.location.href = alternative.url;
-        });
-    }
-    const cancelBtn = document.getElementById('cancel-redirect');
-    if (cancelBtn) {
-        cancelBtn.addEventListener('click', () => {
-        clearInterval(timer);
-            redirectInfo.remove();
         });
     }
 }
