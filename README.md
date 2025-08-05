@@ -17,7 +17,11 @@ Browser extension that blocks domains of companies with verified Israeli militar
 
 ## Installation
 
-1. **Download** latest release zip
+### Firefox (Recommended)
+- **[Install from Firefox Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/palestinian-domain-blocker/)** (pending approval)
+
+### Chrome/Edge
+1. **Download** latest release zip from [GitHub Releases](https://github.com/arcanstone/Palestinian-Domain-Blocker-v2/releases)
 2. **Extract** files 
 3. **Run** `install-extension.bat` (Windows) or load manually
 4. **Enable** Developer mode in Chrome → Load unpacked
