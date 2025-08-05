@@ -84,11 +84,20 @@ function deployToFirefox() {
 
         // Submit to Mozilla Add-ons
         console.log('🔄 Submitting to Mozilla Add-ons...');
-        const cmd = `web-ext sign --source-dir=${buildDir} --api-key=${process.env.AMO_JWT_ISSUER} --api-secret=${process.env.AMO_JWT_SECRET} --id=${EXTENSION_ID}`;
+        const cmd = `web-ext sign --source-dir=${buildDir} --api-key=${process.env.AMO_JWT_ISSUER} --api-secret=${process.env.AMO_JWT_SECRET}`;
         
-        execSync(cmd, { stdio: 'inherit' });
-        
-        console.log('🎉 Successfully submitted to Firefox Add-ons!');
+        try {
+            execSync(cmd, { stdio: 'inherit' });
+            console.log('🎉 Successfully submitted to Firefox Add-ons!');
+        } catch (error) {
+            // Check if it's the "listed add-on" case (which is actually success)
+            if (error.message.includes('submitted for review') || error.message.includes('passed validation')) {
+                console.log('🎉 Successfully submitted to Firefox Add-ons for review!');
+                console.log('✅ Extension passed validation and is now in the review queue');
+            } else {
+                throw error; // Re-throw if it's a different error
+            }
+        }
         console.log('📋 Next steps:');
         console.log('   - Check https://addons.mozilla.org/developers/ for review status');
         console.log('   - Review typically takes 1-7 days');

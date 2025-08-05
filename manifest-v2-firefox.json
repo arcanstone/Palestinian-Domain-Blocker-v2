@@ -13,7 +13,7 @@
     "<all_urls>"
   ],
   "background": {
-    "scripts": ["background-firefox.js"],
+    "scripts": ["background.js"],
     "persistent": true
   },
   "browser_action": {
@@ -37,7 +37,6 @@
     "blocked.js",
     "dino-game.js",
     "pixel-fonts.js",
-    "chrome-warning.html",
     "google-example/bw_tank-removebg-preview.png",
     "google-example/google-chrome-guess-the-font-dinosaur-game-nvidia-shield-chrome-2624772108-removebg-preview.png"
   ],
