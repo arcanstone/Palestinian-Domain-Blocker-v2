@@ -15,14 +15,33 @@ function setupEventListeners() {
 }
 function loadDomainCounts() {
     chrome.storage.local.get(['blockedDomains'], (data) => {
-        const blockedCount = (data.blockedDomains || []).length;
-        document.getElementById('blocked-count').textContent = blockedCount;
+        if (!data.blockedDomains) {
+            // Get count from background script
+            chrome.runtime.sendMessage({action: 'getBlockedDomains'}, (response) => {
+                const count = response && response.domains ? response.domains.length : 0;
+                document.getElementById('blocked-count').textContent = count;
+            });
+        } else {
+            document.getElementById('blocked-count').textContent = data.blockedDomains.length;
+        }
     });
 }
 function loadDomainLists() {
     chrome.storage.local.get(['blockedDomains'], (data) => {
-        const blockedDomains = data.blockedDomains || [];
-        displayDomains('blocked', blockedDomains);
+        // If no custom domains stored, the background script should have initialized them
+        // But if popup loads before background script, we need to handle this
+        if (!data.blockedDomains) {
+            // Force initialization by sending message to background script
+            chrome.runtime.sendMessage({action: 'getBlockedDomains'}, (response) => {
+                if (response && response.domains) {
+                    displayDomains('blocked', response.domains);
+                } else {
+                    displayDomains('blocked', []);
+                }
+            });
+        } else {
+            displayDomains('blocked', data.blockedDomains);
+        }
     });
 }
 function displayDomains(type, domains) {

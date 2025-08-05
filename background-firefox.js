@@ -106,4 +106,12 @@ chrome.runtime.onInstalled.addListener(initializeBlockedDomains);
 // Initialize immediately
 initializeBlockedDomains();
 
+// Handle messages from popup
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.action === 'getBlockedDomains') {
+        sendResponse({domains: blockedDomains});
+    }
+    return true;
+});
+
 console.log("Firefox background script loaded - domains:", blockedDomains.length);

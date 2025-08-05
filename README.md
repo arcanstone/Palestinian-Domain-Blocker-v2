@@ -2,6 +2,9 @@
 
 Browser extension that blocks domains of companies with verified Israeli military contracts.
 
+<img width="1920" height="1080" alt="Screenshot (21)" src="https://github.com/user-attachments/assets/486f54d8-5fa5-4899-ac9b-fd43dc89ee75" />
+
+
 ## What it blocks
 
 **32 verified domains** with documented military ties:
