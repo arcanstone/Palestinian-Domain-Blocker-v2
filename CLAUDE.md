@@ -137,3 +137,42 @@ Tag pattern: v[major].[minor].[patch]
 - The zip structure was fixed in v3.1.1 to create a single folder instead of loose files
 - Users can now easily drag the `Palestinian-Domain-Blocker` folder out of downloaded zips
 - GitHub Actions workflow may need RELEASE_TOKEN secret to create releases automatically
+
+## Current Status (v3.1.2)
+
+### Completed Features
+- **Dual Browser Support**: Chrome (Manifest V3) and Firefox (Manifest V2) versions working
+- **Fixed UI Issues**: Blocked page no longer shows "Loading...", alternatives display correctly
+- **Professional Build System**: Separate Chrome/Firefox packaging with `npm run zip:chrome` and `npm run zip:firefox`
+- **Mozilla Submission Ready**: Clean XPI structure with extension ID for permanent Firefox installation
+
+### Files Ready for Distribution
+- **Chrome**: Use standard `manifest.json` + `background.js` 
+- **Firefox**: Use `manifest-v2-firefox.json` + `background-firefox.js`
+- **Mozilla Submission**: File `palestinian-domain-blocker-mozilla-v3.1.2.zip` is ready for upload
+
+### Testing Completed
+- Chrome extension loads and blocks domains correctly
+- Firefox extension works via about:debugging (temporary)
+- Blocked page displays domain name and alternatives properly
+- Extension popup interface functional
+
+### Mozilla Submission Process
+1. Upload `palestinian-domain-blocker-mozilla-v3.1.2.zip` to https://addons.mozilla.org/developers/
+2. Extension ID: `palestinian-domain-blocker@solidarity.org`
+3. Clean structure with manifest.json at root level
+4. Version 3.1.2, ~40KB file size
+
+### Known Issues / Next Steps
+- UI improvements needed (user wants to make changes)
+- Need comprehensive testing before Mozilla submission
+- Regular Firefox users cannot install unsigned extensions (requires Mozilla signing)
+
+### Testing Checklist Before Mozilla Submission
+- [ ] Verify all blocked domains redirect properly
+- [ ] Test popup functionality (all tabs, add/remove domains)  
+- [ ] Test alternatives display on blocked pages
+- [ ] Verify extension persists after browser restart
+- [ ] Check for console errors or broken functionality
+- [ ] Test with different domain variations (www vs non-www)
+- [ ] Ensure extension icon displays correctly
