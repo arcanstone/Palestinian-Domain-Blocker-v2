@@ -2,7 +2,7 @@
   "name": "Palestinian Domain Blocker",
   "version": "2.0.0",
   "description": "Production-ready browser extension for Palestinian solidarity",
-  "buildDate": "2025-08-05T00:32:46.511Z",
+  "buildDate": "2025-08-05T00:43:24.116Z",
   "files": [
     "manifest.json",
     "background.js",

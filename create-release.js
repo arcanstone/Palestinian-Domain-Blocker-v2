@@ -16,6 +16,9 @@ function createZip() {
         'blocked.js',
         'README.md',
         'INSTALL.md',
+        'QUICK-INSTALL.md',
+        'install-extension.bat',
+        'install-extension.ps1',
         'LICENSE'
     ];
     
