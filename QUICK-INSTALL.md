@@ -2,23 +2,39 @@
 
 ## Method 1: Automated Install (Windows)
 
-### Option A: Batch Script
+### Chrome/Edge/Brave:
+**Option A: Batch Script**
 1. **Extract the zip** to any folder
 2. **Double-click** `install-extension.bat`
 3. **Follow the prompts** - Chrome will open automatically
 
-### Option B: PowerShell Script  
+**Option B: PowerShell Script**  
 1. **Extract the zip** to any folder
 2. **Right-click** `install-extension.ps1` → **Run with PowerShell**
 3. **Follow the prompts** - Chrome will open automatically
 
+### Firefox:
+1. **Extract the zip** to any folder
+2. **Open Firefox** → go to `about:addons`
+3. **Click gear icon** → **"Install Add-on From File..."**
+4. **Select** `manifest.json` from the extracted folder
+5. **Click "Add"** when prompted
+
 ## Method 2: Manual Install (All Platforms)
 
+### Chrome/Edge/Brave:
 1. **Extract the zip** to any folder
-2. **Open Chrome** → go to `chrome://extensions/`
+2. **Open browser** → go to `chrome://extensions/` (or `edge://extensions/`)
 3. **Enable "Developer mode"** (toggle in top-right)
 4. **Click "Load unpacked"** 
 5. **Select the extracted folder**
+
+### Firefox:
+1. **Extract the zip** to any folder
+2. **Open Firefox** → go to `about:debugging`
+3. **Click "This Firefox"**
+4. **Click "Load Temporary Add-on..."**
+5. **Select** `manifest.json` from the extracted folder
 
 ## Method 3: From GitHub Releases
 
@@ -29,7 +45,7 @@
 
 ## After Installation
 
-- Look for the extension icon in your Chrome toolbar
+- Look for the extension icon in your browser toolbar
 - Click it to see blocked/allowed domains
 - The extension will automatically block the configured domains
 
@@ -41,9 +57,8 @@
 - Check that all files were extracted properly
 
 **Missing icon?**  
-- Go to `chrome://extensions/` 
-- Find "Palestinian Domain Blocker"
-- Click the pin icon to show in toolbar
+- **Chrome/Edge**: Go to `chrome://extensions/` → Find "Palestinian Domain Blocker" → Click pin icon
+- **Firefox**: Go to `about:addons` → Find "Palestinian Domain Blocker" → Enable
 
 ---
 

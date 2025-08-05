@@ -30,15 +30,21 @@ function createZip() {
         'icons/icon128.png'
     ];
     
-    // Create dist directory
+    // Create dist directory with extension folder
+    const extensionFolderName = 'Palestinian-Domain-Blocker';
+    const distPath = path.join('dist', extensionFolderName);
+    
     if (!fs.existsSync('dist')) {
         fs.mkdirSync('dist');
     }
+    if (!fs.existsSync(distPath)) {
+        fs.mkdirSync(distPath);
+    }
     
-    // Copy all files to dist
+    // Copy all files to extension folder inside dist
     files.forEach(file => {
         if (fs.existsSync(file)) {
-            fs.copyFileSync(file, path.join('dist', file));
+            fs.copyFileSync(file, path.join(distPath, file));
             console.log(`[RELEASE] Copied ${file}`);
         } else {
             console.warn(`[RELEASE] Warning: ${file} not found`);
@@ -46,22 +52,22 @@ function createZip() {
     });
     
     // Copy icons directory
-    if (!fs.existsSync('dist/icons')) {
-        fs.mkdirSync('dist/icons');
+    if (!fs.existsSync(path.join(distPath, 'icons'))) {
+        fs.mkdirSync(path.join(distPath, 'icons'));
     }
     
     iconFiles.forEach(file => {
         if (fs.existsSync(file)) {
-            fs.copyFileSync(file, path.join('dist', file));
+            fs.copyFileSync(file, path.join(distPath, file));
             console.log(`[RELEASE] Copied ${file}`);
         } else {
             console.warn(`[RELEASE] Warning: ${file} not found`);
         }
     });
     
-    console.log('[RELEASE] Extension files prepared in dist/ directory');
-    console.log('[RELEASE] To create zip manually: compress the dist/ folder contents');
-    console.log('[RELEASE] For Chrome Web Store: zip the contents of dist/ folder');
+    console.log(`[RELEASE] Extension files prepared in dist/${extensionFolderName}/ directory`);
+    console.log('[RELEASE] Users can now drag the Palestinian-Domain-Blocker folder out of the zip');
+    console.log('[RELEASE] For stores: zip the contents of the extension folder (not the folder itself)');
 }
 
 function generateReleaseNotes() {
