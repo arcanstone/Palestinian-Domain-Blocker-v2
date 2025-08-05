@@ -1,271 +1,35 @@
+
 const preSelectedDomains = [
-    "rapyd.net", // Rapyd - Israeli payment processing platform
-    "fireblocks.com", // Fireblocks - Israeli crypto custody platform
-    "forter.com", // Forter - Israeli e-commerce fraud prevention
-    "timeclock365.com", // Israeli time tracking software
-    "syncpal.co", // Israeli file synchronization
-    "laufer.group", // Israeli business consulting
-    "bizo.com", // Israeli B2B marketing platform
-    "cardscan.com", // Israeli business card scanning
-    "leadspace.com", // Israeli B2B lead generation
-    "opster.com", // Israeli Elasticsearch consulting
-    "wix.com", // Wix - Israeli website builder giant
-    "zoominfo.com", // ZoomInfo - Israeli-founded B2B database
-    "checkpoint.com", // Check Point - Israeli cybersecurity pioneer
-    "cyberark.com", // CyberArk - Israeli privileged access management
-    "cybereason.com", // Cybereason - Israeli endpoint detection
-    "paloaltonetworks.com", // Palo Alto Networks - Israeli-founded security
-    "imperva.com", // Imperva - Israeli data security platform
-    "radware.com", // Radware - Israeli application delivery & security
-    "armis.com", // Armis - Israeli IoT security platform
-    "wiz.io", // Wiz - Israeli cloud security unicorn
-    "wing.security", // Wing Security - Israeli SaaS security
-    "salt.security", // Salt Security - Israeli API security
-    "noname.security", // Noname Security - Israeli API security
-    "morphisec.com", // Morphisec - Israeli endpoint security
-    "argus-sec.com", // Argus Cyber Security - Israeli automotive security
-    "astrixsecurity.com", // Astrix Security - Israeli SaaS security
-    "axis-security.com", // Axis Security - Israeli zero trust network
-    "claroty.com", // Claroty - Israeli industrial cybersecurity
-    "cyberbit.com", // Cyberbit - Israeli cybersecurity training
-    "cycognito.com", // CyCognito - Israeli attack surface management
-    "cypago.com", // Cypago - Israeli GRC automation
-    "digsecurity.com", // Dig Security - Israeli data security
-    "entitle.co", // Entitle - Israeli cloud permissions management
-    "hubsecurity.com", // Hub Security - Israeli cybersecurity
-    "hunters.ai", // Hunters.ai - Israeli SOC platform
-    "indeni.com", // Indeni - Israeli network security monitoring
-    "infinipoint.com", // Infinipoint - Israeli device security
-    "intsights.com", // IntSights - Israeli threat intelligence
-    "lacoon.com", // Lacoon - Israeli mobile security (acquired by Check Point)
-    "nso-group.com", // NSO Group - Israeli spyware company
-    "perimeterx.com", // PerimeterX - Israeli bot protection
-    "secdo.com", // Secdo - Israeli incident response (acquired by Palo Alto)
-    "silverfort.com", // Silverfort - Israeli identity security
-    "votiro.com", // Votiro - Israeli content disarm & reconstruction
-    "cloudendure.com", // CloudEndure - Israeli disaster recovery (acquired by AWS)
-    "cloudinary.com", // Cloudinary - Israeli media management platform
-    "ctera.com", // CTERA - Israeli cloud storage gateway
-    "infinidat.com", // Infinidat - Israeli enterprise storage
-    "xensource.com", // XenSource - Israeli virtualization (acquired by Citrix)
-    "xiv.com", // XIV - Israeli storage systems (acquired by IBM)
-    "explorium.ai", // Explorium - Israeli external data platform
-    "hyperwise.com", // Hyperwise - Israeli AI optimization
-    "namogoo.com", // Namogoo - Israeli customer journey hijacking prevention
-    "rosh-intelligent.com", // Rosh Intelligent Systems - Israeli AI
-    "ezchip.com", // EZchip - Israeli network processors (acquired by Mellanox)
-    "primesense.com", // PrimeSense - Israeli 3D sensing (acquired by Apple)
-    "solaredge.com", // SolarEdge - Israeli solar power optimization
-    "audiocodes.com", // AudioCodes - Israeli VoIP technology
-    "gilat.com", // Gilat Satellite Networks - Israeli satellite communications
-    "commscope.com", // CommScope - has significant Israeli operations
-    "crosswise.com", // Crosswise - Israeli audience platform
-    "ivix.com", // IVIX - Israeli network optimization
-    "viber.com", // Viber - Israeli messaging app (acquired by Rakuten)
-    "icq.com", // ICQ - Israeli instant messaging (originally Israeli-founded)
-    "nice.com", // NICE - Israeli customer experience analytics
-    "verint.com", // Verint - Israeli customer engagement platform
-    "overops.com", // OverOps - Israeli application reliability
-    "onavo.com", // Onavo - Israeli mobile analytics (acquired by Facebook)
-    "ilventures.com", // Israeli venture capital
-    "gideononline.com", // Israeli business services
-    "levltech.com", // Israeli technology consulting
-    "yonatanlabs.com", // Israeli development labs
-    "waze.com", // Waze - Israeli navigation app (acquired by Google)
-    "adallom.com", // Adallom - Israeli cloud security (acquired by Microsoft)
-    "alphimax.com", // Israeli technology company
-    "altnext.com", // Israeli alternative investment platform
-    "bzigo.com", // Israeli smart home pest control
-    "ctslabs.com", // CTS Labs - Israeli security research
-    "fstbm.com", // Israeli technology services
-    "godaddy.com", // Note: US company but significant Israeli development centers
-    "ibt.com.ro", // Israeli business technology services
-    "facebook.com",
-    "meta.com", 
-    "instagram.com",
-    "whatsapp.com",
-    "threads.net",
-    "google.com",
-    "youtube.com",
-    "gmail.com",
-    "googledrive.com",
-    "googlecloud.com",
-    "android.com",
-    "chrome.com",
-    "amazon.com",
-    "aws.amazon.com",
-    "prime.amazon.com",
-    "audible.com",
-    "twitch.tv",
-    "imdb.com",
-    "zappos.com",
-    "wholefoods.com",
-    "microsoft.com",
-    "outlook.com",
-    "office.com",
-    "teams.microsoft.com",
-    "azure.microsoft.com",
-    "xbox.com",
-    "linkedin.com",
-    "github.com",
-    "skype.com",
-    "apple.com",
-    "icloud.com",
-    "itunes.com",
-    "appstore.com",
-    "oracle.com",
-    "salesforce.com",
-    "slack.com",
-    "tableau.com",
-    "intel.com",
-    "nvidia.com",
-    "palantir.com",
-    "airbnb.com",
-    "uber.com",
-    "ubereats.com",
-    "netflix.com",
-    "paypal.com",
-    "stripe.com",
-    "zoom.us",
-    "shopify.com",
-    "discord.com",
-    "spotify.com",
-    "tiktok.com",
-    "x.com",
-    "twitter.com",
-    "reddit.com",
-    "snapchat.com",
-    "adobe.com",
-    "cisco.com",
-    "webex.com",
-    "ibm.com",
-    "hp.com",
-    "hpe.com",
-    "dell.com",
-    "vmware.com",
-    "servicenow.com",
-    "workday.com",
-    "atlassian.com",
-    "jira.com",
-    "confluence.com",
-    "trello.com",
-    "twilio.com",
-    "sendgrid.com",
-    "datadog.com",
-    "cloudflare.com",
-    "mongodb.com",
-    "elastic.co",
-    "jetbrains.com",
-    "unity.com",
-    "autodesk.com",
-    "intuit.com",
-    "quickbooks.com",
-    "turbotax.com",
-    "mailchimp.com",
-    "docusign.com",
-    "okta.com",
-    "crowdstrike.com",
-    "fortinet.com",
-    "sentinelone.com",
-    "lockheedmartin.com", // Lockheed Martin - F-35 joint program, Iron Dome components
-    "boeing.com", // Boeing - Military aircraft sales, defense partnerships
-    "raytheon.com", // Raytheon - Missile defense systems, Iron Dome cooperation
-    "northropgrumman.com", // Northrop Grumman - Defense electronics, UAV partnerships
-    "generaldynamics.com", // General Dynamics - Military vehicles, communications
-    "bae.co.uk", // BAE Systems - Defense electronics, joint ventures
-    "thalesgroup.com", // Thales - Defense electronics, radar systems
-    "leonardo.com", // Leonardo - Defense systems, joint ventures
-    "elbit.co.il", // Elbit Systems - Israeli defense contractor (already Israeli)
-    "iai.co.il", // Israel Aerospace Industries (already Israeli)
-    "caterpillar.com", // Caterpillar - Equipment used in settlements, military operations
-    "motorolasolutions.com", // Motorola Solutions - Communications for Israeli military
-    "ge.com", // General Electric - Aviation, power systems for Israeli military
-    "honeywell.com", // Honeywell - Aerospace systems, defense electronics
-    "l3harris.com", // L3Harris - Military communications, surveillance systems
-    "textron.com", // Textron - Military vehicles, aircraft systems
-    "mckinsey.com", // McKinsey - Strategic consulting for Israeli government
-    "deloitte.com", // Deloitte - Government consulting, defense sector work
-    "pwc.com", // PwC - Government advisory, defense consulting
-    "ey.com", // Ernst & Young - Government consulting
-    "kpmg.com", // KPMG - Government advisory services
-    "accenture.com", // Accenture - Government IT services, defense consulting
-    "blackrock.com", // BlackRock - Major Israeli government bond investments
-    "vanguard.com", // Vanguard - Israeli government bond funds
-    "fidelity.com", // Fidelity - Israeli investment funds
-    "statestreet.com", // State Street - Israeli government securities
-    "jpmorganchase.com", // JPMorgan Chase - Israeli government bond underwriting
-    "goldmansachs.com", // Goldman Sachs - Israeli government financial services
-    "morganstanley.com", // Morgan Stanley - Israeli investment banking
-    "bankofamerica.com", // Bank of America - Israeli government banking
-    "citigroup.com", // Citigroup - Israeli government financial services
-    "wellsfargo.com", // Wells Fargo - Israeli investment services
-    "verizon.com", // Verizon - Israeli government communications contracts
-    "att.com", // AT&T - Israeli government telecommunications
-    "tmobile.com", // T-Mobile - Israeli partnerships
-    "sprint.com", // Sprint - Israeli technology partnerships
-    "sequoiacap.com", // Sequoia Capital - Major Israeli startup investments
-    "a16z.com", // Andreessen Horowitz - Significant Israeli portfolio
-    "kleinerperkins.com", // Kleiner Perkins - Israeli startup investments
-    "accel.com", // Accel Partners - Israeli venture investments
-    "gv.com", // Google Ventures - Israeli startup investments
-    "intel.capital", // Intel Capital - Major Israeli tech investments
-    "qualcomm.ventures", // Qualcomm Ventures - Israeli semiconductor investments
-    "cvs.com", // CVS - Israeli healthcare tech investments
-    "remax.com", // RE/MAX - Operations in Israeli settlements
-    "century21.com", // Century 21 - Settlement real estate operations
-    "marriott.com", // Marriott - Hotels in settlements and Jerusalem
-    "hilton.com", // Hilton - Hotels in settlements
-    "hyatt.com", // Hyatt - Hotels in occupied territories
-    "ihg.com", // InterContinental Hotels - Settlement operations
-    "accor.com", // Accor Hotels - Settlement properties
-    "fedex.com", // FedEx - Israeli military logistics contracts
-    "ups.com", // UPS - Israeli government delivery contracts
-    "dhl.com", // DHL - Israeli military/government logistics
-    "chevron.com", // Chevron - Israeli energy partnerships
-    "exxonmobil.com", // ExxonMobil - Israeli energy exploration
-    "shell.com", // Shell - Israeli energy operations
-    "bp.com", // BP - Israeli energy partnerships
-    "totalenergies.com", // TotalEnergies - Israeli gas field partnerships
-    "pfizer.com", // Pfizer - Israeli military medical contracts
-    "jnj.com", // Johnson & Johnson - Israeli military healthcare
-    "merck.com", // Merck - Israeli government pharmaceutical contracts
-    "abbvie.com", // AbbVie - Israeli military medical supplies
-    "roche.com", // Roche - Israeli government healthcare contracts
-    "nestle.com", // Nestlé - Settlement agriculture partnerships
-    "unilever.com", // Unilever - Settlement factory operations
-    "pepsico.com", // PepsiCo - Israeli military/settlement operations
-    "cocacola.com", // Coca-Cola - Settlement bottling operations
-    "danone.com", // Danone - Israeli settlement operations
-    "generalmills.com", // General Mills - Israeli agricultural partnerships
-    "walmart.com", // Walmart - Israeli settlement supply chains
-    "target.com", // Target - Israeli partnership operations
-    "costco.com", // Costco - Israeli government contracts
-    "homedepot.com", // Home Depot - Settlement construction supplies
-    "lowes.com", // Lowe's - Settlement building materials
-    "brazzers.com", // Brazzers - Adult content platform
-    "pornhub.com", // Pornhub - Adult content platform
-    "redtube.com", // RedTube - Adult content platform
-    "youporn.com", // YouPorn - Adult content platform
-    "tube8.com", // Tube8 - Adult content platform
-    "xtube.com", // Xtube - Adult content platform
-    "digitalplayground.com", // Digital Playground - Adult content studio
-    "men.com", // Men.com - Adult content platform
-    "mofos.com", // Mofos - Adult content studio
-    "nutaku.com", // Nutaku - Adult gaming platform
-    "realitykings.com", // Reality Kings - Adult content studio
-    "seancody.com", // Sean Cody - Adult content studio
-    "twistys.com", // Twistys - Adult content studio
-    "whynotbi.com", // WhyNotBi.com - Adult content platform
-    "pitango.com", // Pitango Venture Capital - Leading Israeli VC
-    "jerusalemvc.com", // Jerusalem Venture Partners - Israeli VC
-    "glenrockisrael.com", // Glenrock Israel - Israeli investment fund
-    "gemini.com", // Gemini Israel Funds - Israeli investment
-    "carmelventures.com", // Carmel Ventures - Israeli VC
-    "violagroup.com", // Viola Group - Major Israeli VC
-    "alephvc.com", // Aleph VC - Israeli venture capital
-    "bessemer.com", // Bessemer Venture Partners - Major Israeli investments
-    "insight.com", // Insight Partners - Significant Israeli portfolio
-    "battery.com", // Battery Ventures - Israeli startup investments
+    "elbitsystems.com", // Elbit Systems - 17% revenue from Israeli MoD, primary IDF equipment supplier
+    "iai.co.il", // Israel Aerospace Industries - State-owned, direct IDF supplier  
+    "rafael.co.il", // Rafael Advanced Defense Systems - $5.2B MoD contract (2025), Iron Dome
+    "nsogroup.com", // NSO Group - Licensed by Israeli MoD, Pegasus spyware
+    "cellebrite.com", // Cellebrite - Unit 8200 recruitment, mobile forensics for military
+    "verint.com", // Verint - Licensed by Israeli MoD for surveillance exports
+    "checkpoint.com", // Check Point - Provides cybersecurity to Israeli military
+    "cyberark.com", // CyberArk - Privileged access management for Israeli defense sector
+    "claroty.com", // Claroty - Israeli industrial cybersecurity, military applications
+    "armis.com", // Armis - Israeli IoT security, military/government clients
+    "radware.com", // Radware - Israeli security, some military applications
+    "nice.com", // NICE - Israeli customer analytics, some government contracts
+    "lockheedmartin.com", // $6B+ Industrial Participation agreements, F-35 program
+    "boeing.com", // F-15 fighter jets, Apache helicopters to Israeli Air Force
+    "rtx.com", // Raytheon - Iron Dome components, F-16 missiles
+    "northropgrumman.com", // $8.9M cannon contract (Dec 2024), Sa'ar 5 warships
+    "generaldynamics.com", // Sole US producer of MK-80 bombs used by Israel
+    "l3harris.com", // Military communications, surveillance systems
+    "textron.com", // Military vehicles, aircraft systems
+    "google.com", // $1.2B Project Nimbus, direct Israeli MoD consulting (2024)
+    "amazon.com", // Co-partner in $1.2B Project Nimbus contract
+    "microsoft.com", // $133M Israeli MoD contract (2021), S500 priority client
+    "palantir.com", // Strategic partnership with Israeli MoD (Jan 2024)
+    "ibm.com", // 25-year contract as main IT provider for IDF logistics (2020)
+    "intel.com", // Largest private employer in Israel, $25B chip plant investment
+    "caterpillar.com", // D9 bulldozers to IDF under US Foreign Military Sales
+    "blackrock.com", // Major shareholder (7-8%) in defense contractors
+    "vanguard.com", // Largest institutional investor (9-10%) in defense contractors
+    "jpmorgan.com", // Underwriter of Israeli war bonds, Tel Aviv office
+    "wiz.io" // Wiz - Israeli cloud security, some military applications
 ];
 const domainCategories = {
     "israeli_fintech": "Israeli Fintech & Payments",

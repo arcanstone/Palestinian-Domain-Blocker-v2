@@ -34,7 +34,7 @@ A community-driven browser extension supporting Palestinian solidarity through e
 *Coming soon - pending review*
 
 ### Manual Installation
-1. Download the latest release from [GitHub Releases](https://github.com/oussamakou/Palestinian-Domain-Blocker-v2/releases)
+1. Download the latest release from [GitHub Releases](https://github.com/arcanstone/Palestinian-Domain-Blocker-v2/releases/tag/v2.0.0)
 2. Extract the ZIP file
 3. Open Chrome and go to `chrome://extensions/`
 4. Enable "Developer mode" in the top right
