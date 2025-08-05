@@ -67,3 +67,51 @@ The extension requires:
 - Icons are in the `icons/` subdirectory
 - Documentation files: README.md, INSTALL.md, QUICK-INSTALL.md, RELEASE_NOTES.md
 - Build artifacts are generated in `dist/` directory
+
+## Release Process
+
+### Creating a New Release
+
+1. **Update version number** in manifest.json (current pattern: v3.1.0 -> v3.1.1 for patches)
+
+2. **Test and commit changes**:
+   ```bash
+   npm install  # Install dependencies if needed
+   npm run zip  # Test zip creation (creates proper folder structure)
+   git add .
+   git commit -m "Description of changes"
+   git push origin master
+   ```
+
+3. **Create and push git tag**:
+   ```bash
+   git tag v3.1.1  # Use next version number
+   git push origin v3.1.1
+   ```
+
+4. **Build release package**:
+   ```bash
+   node create-release.js  # Creates dist/Palestinian-Domain-Blocker/ folder structure
+   cd dist
+   # Create zip from folder (for GitHub releases)
+   powershell -Command "Compress-Archive -Path 'Palestinian-Domain-Blocker' -DestinationPath '../palestinian-domain-blocker-v3.1.1.zip' -Force"
+   ```
+
+5. **GitHub Actions**: The tag push automatically triggers `.github/workflows/release.yml` which creates the GitHub release
+
+### Release Artifacts
+
+- **npm run zip**: Creates zip with `Palestinian-Domain-Blocker/` folder structure (user-friendly)
+- **create-release.js**: Creates `dist/Palestinian-Domain-Blocker/` folder with all files for distribution
+- **GitHub Actions**: Automatically creates GitHub release when tags are pushed
+
+### Version History Reference
+
+Latest releases: v3.1.0 (current) -> v3.1.1 (next patch)
+Tag pattern: v[major].[minor].[patch]
+
+### Important Notes
+
+- The zip structure was fixed in v3.1.1 to create a single folder instead of loose files
+- Users can now easily drag the `Palestinian-Domain-Blocker` folder out of downloaded zips
+- GitHub Actions workflow may need RELEASE_TOKEN secret to create releases automatically
