@@ -5,14 +5,9 @@
   "main": "background.js",
   "scripts": {
     "build": "node build.js",
-    "build:chrome": "node build.js chrome",
-    "build:firefox": "node build.js firefox",
-    "build:all": "npm run build:chrome && npm run build:firefox",
     "test": "echo \"No tests specified\" && exit 0",
-    "zip": "npm run zip:chrome",
-    "zip:chrome": "node -e \"const fs=require('fs'); const path=require('path'); const archiver=require('archiver'); const output=fs.createWriteStream('palestinian-domain-blocker-chrome-v3.1.1.zip'); const archive=archiver('zip'); output.on('close',()=>console.log('Chrome extension packaged successfully!')); archive.on('error',err=>{throw err;}); archive.pipe(output); const folderName='Palestinian-Domain-Blocker-Chrome'; const files=['manifest.json','background.js','popup.html','popup.js','blocked.html','blocked.js','icons/','README.md','INSTALL.md','QUICK-INSTALL.md','install-extension.bat','install-extension.ps1','LICENSE']; files.forEach(file=>{if(fs.existsSync(file)){if(fs.statSync(file).isDirectory()){archive.directory(file,folderName+'/'+file);}else{archive.file(file,{name:folderName+'/'+file});}}else{console.warn('Missing file:',file);}}); archive.finalize();\"",
-    "zip:firefox": "node -e \"const fs=require('fs'); const path=require('path'); const archiver=require('archiver'); const output=fs.createWriteStream('palestinian-domain-blocker-firefox-v3.1.1.zip'); const archive=archiver('zip'); output.on('close',()=>console.log('Firefox extension packaged successfully!')); archive.on('error',err=>{throw err;}); archive.pipe(output); const folderName='Palestinian-Domain-Blocker-Firefox'; const files=['manifest-v2-firefox.json','background-firefox.js','popup.html','popup.js','blocked.html','blocked.js','icons/','README.md','INSTALL.md','QUICK-INSTALL.md','install-extension.bat','install-extension.ps1','LICENSE']; files.forEach(file=>{if(fs.existsSync(file)){const filename = file === 'manifest-v2-firefox.json' ? 'manifest.json' : (file === 'background-firefox.js' ? 'background.js' : file); if(fs.statSync(file).isDirectory()){archive.directory(file,folderName+'/'+file);}else{archive.file(file,{name:folderName+'/'+filename});}}else{console.warn('Missing file:',file);}}); archive.finalize();\"",
-    "zip:all": "npm run zip:chrome && npm run zip:firefox"
+    "deploy:firefox": "node deploy-firefox.js",
+    "deploy:firefox:setup": "node deploy-firefox.js --setup"
   },
   "repository": {
     "type": "git",
@@ -33,6 +28,7 @@
     "url": "https://github.com/arcanstone/Palestinian-Domain-Blocker-v2/issues"
   },
   "devDependencies": {
-    "archiver": "^5.3.1"
+    "archiver": "^5.3.1",
+    "web-ext": "^7.8.0"
   }
 }
