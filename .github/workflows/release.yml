@@ -121,41 +121,21 @@ jobs:
         body: |
           ## What's New in ${{ steps.version.outputs.tag_name }}
 
-          🧹 **Repository Cleanup & Automation**
-          - Removed duplicate and unnecessary files while preserving all functionality
-          - Added automated Firefox Add-ons deployment system  
-          - Fixed Firefox manifest background script reference
-          - Streamlined extension structure with only essential files
+          - Repository cleanup and automated deployment system
+          - Firefox Add-ons store submission with validation passing
+          - Chrome dinosaur game with improved physics and collision detection
+          - Automated release workflow for both Chrome and Firefox
 
-          🦊 **Firefox Store Submission** 
-          - Extension successfully submitted to Mozilla Add-ons store
-          - Passed all validation checks
-          - Now available for installation: [Firefox Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/palestinian-domain-blocker/)
+          ### Installation
 
-          🎮 **Game Features Maintained**
-          - Chrome dinosaur sprite with running animation  
-          - Tuned jump physics (jumpPower: 3, gravity: 0.08)
-          - Proper collision detection with tank obstacles
-          - Pixel-perfect fonts for retro gaming experience
+          **Firefox:**
+          Install from [Firefox Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/palestinian-domain-blocker/)
 
-          🚀 **Developer Experience**
-          - Automated deployment: `npm run deploy:firefox`
-          - Clean repository structure (~15 essential files)
-          - Both Chrome and Firefox extensions build correctly
-
-          ### Installation Instructions
-
-          **Firefox (Recommended):**
-          - [Install from Firefox Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/palestinian-domain-blocker/)
-
-          **Chrome/Edge/Brave:**
-          1. Download `palestinian-domain-blocker-chrome.zip` below
-          2. Extract the zip file to a folder on your computer
-          3. Open Chrome/Edge and go to Extensions page (`chrome://extensions/`)
-          4. Enable "Developer mode" (toggle in top-right corner)
-          5. Click "Load unpacked" and select the extracted folder
-          6. Pin the extension to your toolbar - you're ready to go!
-          
-          Built with ❤️ for Palestinian solidarity and factual accuracy
+          **Chrome/Edge:**
+          1. Download `palestinian-domain-blocker-chrome.zip`
+          2. Extract to folder
+          3. Go to `chrome://extensions/`
+          4. Enable Developer mode
+          5. Click "Load unpacked" and select folder
         draft: false
         prerelease: false
