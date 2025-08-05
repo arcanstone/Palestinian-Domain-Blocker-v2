@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Israeli Domain Blocker</title>
+    <style>
+        :root {
+            --palestinian-red: #ce1126;
+            --palestinian-green: #007a3d;
+            --palestinian-black: #000000;
+            --palestinian-white: #ffffff;
+            --gold-accent: #d4af37;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --text-muted: #b0b0b0;
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;600;700&display=swap');
+
+        body {
+            width: 520px;
+            font-family: 'Cairo', 'Segoe UI', Arial, sans-serif;
+            color: var(--text-primary);
+            margin: 0;
+            padding: 0;
+            overflow-y: auto;
+            min-height: 550px;
+            position: relative;
+            background: linear-gradient(135deg, 
+                var(--palestinian-red) 0%, 
+                var(--palestinian-black) 25%, 
+                var(--palestinian-green) 50%, 
+                var(--palestinian-black) 75%, 
+                var(--palestinian-red) 100%);
+            background-size: 400% 400%;
+            animation: palestinianGradient 8s ease infinite;
+        }
+
+        @keyframes palestinianGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                /* Keffiyeh pattern - more authentic */
+                repeating-linear-gradient(45deg, 
+                    transparent 0px, transparent 8px, 
+                    rgba(255, 255, 255, 0.03) 8px, rgba(255, 255, 255, 0.03) 16px),
+                repeating-linear-gradient(-45deg, 
+                    transparent 0px, transparent 8px, 
+                    rgba(255, 255, 255, 0.03) 8px, rgba(255, 255, 255, 0.03) 16px),
+                /* Olive branch pattern */
+                radial-gradient(circle at 20% 20%, rgba(212, 175, 55, 0.1) 2px, transparent 2px),
+                radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.1) 2px, transparent 2px);
+            background-size: 24px 24px, 24px 24px, 40px 40px, 40px 40px;
+            pointer-events: none;
+            backdrop-filter: blur(1px);
+        }
+
+        /* Palestinian flag stripe overlay */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, 
+                var(--palestinian-black) 0% 33%, 
+                var(--palestinian-white) 33% 66%, 
+                var(--palestinian-green) 66% 100%);
+            z-index: 1000;
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            margin: 8px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .flag-icon {
+            width: 50px;
+            height: 30px;
+            margin: 0 auto 15px;
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* Black stripe (top) */
+        .flag-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 33.33%;
+            background: var(--palestinian-black);
+            z-index: 1;
+        }
+
+        /* White stripe (middle) */
+        .flag-icon::after {
+            content: '';
+            position: absolute;
+            top: 33.33%;
+            left: 0;
+            width: 100%;
+            height: 33.34%;
+            background: var(--palestinian-white);
+            z-index: 1;
+        }
+
+        /* Green stripe (bottom) */
+        .flag-stripe {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 33.33%;
+            background: var(--palestinian-green);
+            z-index: 1;
+        }
+
+        /* Red triangle (left side) */
+        .flag-triangle {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 15px 0 15px 25px;
+            border-color: transparent transparent transparent var(--palestinian-red);
+            z-index: 2;
+        }
+
+        h1 {
+            font-family: 'Noto Sans Arabic', 'Amiri', serif;
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+            margin: 0 0 8px 0;
+            background: linear-gradient(45deg, var(--palestinian-white), var(--gold-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            line-height: 1.2;
+            direction: rtl;
+            unicode-bidi: bidi-override;
+        }
+
+        .arabic-text {
+            font-family: 'Noto Sans Arabic', 'Amiri', serif;
+            font-size: 16px;
+            color: var(--gold-accent);
+            text-align: center;
+            margin-bottom: 5px;
+            opacity: 0.9;
+            direction: rtl;
+            unicode-bidi: bidi-override;
+        }
+
+        h2 {
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        h3 {
+            font-size: 16px;
+            margin: 20px 0 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-icon {
+            font-size: 18px;
+        }
+
+        .input-group {
+            margin: 20px 0;
+            display: flex;
+            gap: 12px;
+            animation: slideIn 0.4s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 14px 16px;
+            border: 2px solid transparent;
+            border-radius: var(--border-radius);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: 'Cairo', sans-serif;
+            transition: var(--transition);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        input[type="text"]::placeholder {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+            transform: translateY(-1px);
+        }
+
+        button {
+            padding: 14px 20px;
+            background: linear-gradient(135deg, var(--palestinian-red), #b30e1f);
+            color: var(--text-primary);
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Cairo', sans-serif;
+            transition: var(--transition);
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #e61429, var(--palestinian-red));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(206, 17, 38, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .primary-button {
+            background: linear-gradient(135deg, var(--palestinian-green), #005a2d);
+        }
+
+        .primary-button:hover {
+            background: linear-gradient(135deg, #008f47, var(--palestinian-green));
+            box-shadow: 0 6px 25px rgba(0, 122, 61, 0.4);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        li {
+            background: rgba(0, 0, 0, 0.2);
+            margin: 8px 0;
+            padding: 10px;
+            border-radius: var(--border-radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+            transition: var(--transition);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        li:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .remove-button {
+            background: rgba(255, 0, 0, 0.3);
+            padding: 5px 10px;
+            font-size: 11px;
+        }
+
+        .remove-button:hover {
+            background: rgba(255, 0, 0, 0.5);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            position: relative;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            padding: 4px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 8px 6px;
+            text-align: center;
+            background: transparent;
+            border-radius: calc(var(--border-radius) - 4px);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 12px;
+            color: var(--text-muted);
+            position: relative;
+            overflow: visible;
+            white-space: nowrap;
+            min-width: 65px;
+        }
+
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--palestinian-red), var(--palestinian-green));
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .tab.active {
+            color: var(--palestinian-white);
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+            background: linear-gradient(135deg, var(--palestinian-red), var(--palestinian-green));
+        }
+
+        .tab.active::before {
+            opacity: 0;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .domain-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            margin-bottom: 10px;
+            transition: var(--transition);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .domain-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border-color: var(--gold-accent);
+        }
+
+        .domain-text {
+            flex-grow: 1;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            word-break: break-word;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-button {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-size: 12px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+
+        .icon-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .edit-button {
+            color: var(--palestinian-green);
+            border-color: rgba(0, 122, 61, 0.3);
+        }
+
+        .edit-button:hover {
+            background: rgba(0, 122, 61, 0.2);
+            border-color: var(--palestinian-green);
+        }
+
+        .delete-button {
+            color: var(--palestinian-red);
+            border-color: rgba(206, 17, 38, 0.3);
+        }
+
+        .delete-button:hover {
+            background: rgba(206, 17, 38, 0.2);
+            border-color: var(--palestinian-red);
+        }
+
+
+
+        /* New styles for enhanced features */
+        .search-container {
+            margin: 10px 0;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px;
+            border: none;
+            border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            font-size: 12px;
+            transition: var(--transition);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .bulk-operations {
+            display: flex;
+            gap: 5px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .bulk-btn {
+            flex: 1;
+            padding: 6px 8px;
+            font-size: 11px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 4px;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 60px;
+        }
+
+        .bulk-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .bulk-btn.danger {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .bulk-btn.danger:hover {
+            background: rgba(255, 0, 0, 0.3);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0 10px;
+        }
+
+        .domain-count {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .empty-message {
+            text-align: center;
+            opacity: 0.7;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--toast-bg);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast-success {
+            background: rgba(76, 175, 80, 0.9);
+        }
+
+        .toast-error {
+            background: rgba(244, 67, 54, 0.9);
+        }
+
+        .toast-warning {
+            background: rgba(255, 193, 7, 0.9);
+            color: #000;
+        }
+
+        .toast-info {
+            background: rgba(33, 150, 243, 0.9);
+        }
+
+        .stats-container {
+            background: linear-gradient(135deg, 
+                rgba(206, 17, 38, 0.15), 
+                rgba(0, 122, 61, 0.15));
+            border: 1px solid var(--glass-border);
+            padding: 16px;
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+            font-size: 13px;
+            backdrop-filter: blur(10px);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 8px 0;
+            padding: 4px 0;
+        }
+
+        .stats-row:not(:last-child) {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+        }
+
+        .stats-label {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .stats-value {
+            color: var(--gold-accent);
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .keyboard-hint {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
+            margin-top: 20px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .bug-report {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: linear-gradient(135deg, var(--palestinian-red), #b30e1f);
+            color: var(--text-primary);
+            padding: 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+            font-size: 12px;
+            font-weight: 600;
+            border: 2px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .bug-report:hover {
+            background: linear-gradient(135deg, #e61429, var(--palestinian-red));
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(206, 17, 38, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border: 1px solid var(--glass-border);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            width: 85%;
+            max-width: 320px;
+            position: relative;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(20px);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 24px;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--palestinian-red);
+            transform: scale(1.1);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            font-family: 'Cairo', sans-serif;
+            font-size: 13px;
+            resize: vertical;
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        .counter {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: right;
+            margin-top: 8px;
+        }
+
+        /* Categories and Submission Styles */
+        .categories-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .category-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            margin: 12px 0;
+            padding: 15px;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+        .category-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .category-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .category-count {
+            background: var(--palestinian-red);
+            color: var(--text-primary);
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .category-description {
+            color: var(--text-secondary);
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .category-domains {
+            display: none;
+            max-height: 150px;
+            overflow-y: auto;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        .category-domains.expanded {
+            display: block;
+        }
+
+        .category-domain {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin: 4px 0;
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .expand-btn {
+            background: none;
+            border: none;
+            color: var(--gold-accent);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0;
+            transition: var(--transition);
+        }
+
+        .expand-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .submit-form {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 15px 0;
+            backdrop-filter: blur(10px);
+        }
+
+        .category-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid transparent;
+            border-radius: var(--border-radius);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-family: 'Cairo', sans-serif;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .category-select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--gold-accent);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+        }
+
+        .category-select option {
+            background: var(--palestinian-black);
+            color: var(--text-primary);
+            padding: 10px;
+        }
+
+        .evidence-textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .submissions-container {
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .submission-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            margin: 10px 0;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .submission-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .submission-domain {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .submission-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .submission-status.pending {
+            background: var(--gold-accent);
+            color: var(--palestinian-black);
+        }
+
+        .submission-status.approved {
+            background: var(--palestinian-green);
+            color: var(--text-primary);
+        }
+
+        .submission-status.rejected {
+            background: var(--palestinian-red);
+            color: var(--text-primary);
+        }
+
+        .submission-meta {
+            color: var(--text-muted);
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        .evidence-link {
+            color: var(--gold-accent);
+            text-decoration: none;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .evidence-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Impact Tab Styles */
+        .impact-visualization {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .impact-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            transition: var(--transition);
+        }
+
+        .impact-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .impact-card h4 {
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            color: var(--gold-accent);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .impact-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .impact-metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--palestinian-green);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .action-category {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            transition: var(--transition);
+        }
+
+        .action-category:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .action-category h4 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-link {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 12px;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .action-link:last-child {
+            border-bottom: none;
+        }
+
+        .action-link:hover {
+            color: var(--gold-accent);
+            padding-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <div class="flag-icon">
+                <div class="flag-stripe"></div>
+                <div class="flag-triangle"></div>
+            </div>
+                            <div class="arabic-text">قاطع المواقع الإسرائيلية</div>
+            <h1>فلسطين حرة</h1>
+            <h2>Block Israeli Domains - Stand with Palestine</h2>
+        </div>
+    
+    <div class="tabs">
+            <div class="tab active" data-tab="blocked">🚫 Blocked</div>
+            <div class="tab" data-tab="whitelist">✅ Whitelist</div>
+            <div class="tab" data-tab="impact">📊 Impact</div>
+            <div class="tab" data-tab="categories">📋 Categories</div>
+            <div class="tab" data-tab="submit">➕ Submit</div>
+    </div>
+
+    <div class="tab-content active" id="blocked-content">
+            <div class="stats-container">
+                <div class="stats-row">
+                    <span class="stats-label">🚫 Blocked Domains:</span>
+                    <span class="stats-value" id="blocked-count">0</span>
+                </div>
+                <div class="stats-row">
+                    <span class="stats-label">⚡ Total Blocks:</span>
+                    <span class="stats-value" id="total-blocks">0</span>
+                </div>
+            </div>
+
+        <div class="input-group">
+                <input type="text" id="domain-input" placeholder="🌐 Enter Israeli domain to block...">
+                <button id="blockButton">🚫 Block</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="blocked-search" class="search-input" placeholder="🔍 Search blocked domains...">
+            </div>
+
+            <div class="bulk-operations">
+                <button id="export-blocked" class="bulk-btn" title="Export blocked domains (Ctrl+E)">📤 Export</button>
+                <button id="import-blocked" class="bulk-btn" title="Import blocked domains (Ctrl+I)">📥 Import</button>
+                <button id="clear-blocked" class="bulk-btn danger" title="Clear all blocked domains">🗑️ Clear All</button>
+        </div>
+        
+            <div class="section-header">
+                <h3><span class="section-icon">🚫</span>Blocked Domains <span id="blocked-count-display" class="domain-count"></span></h3>
+            </div>
+        <div id="domain-list"></div>
+    </div>
+
+    <div class="tab-content" id="whitelist-content">
+            <div class="stats-container">
+                <div class="stats-row">
+                    <span class="stats-label">✅ Whitelisted Domains:</span>
+                    <span class="stats-value" id="whitelisted-count">0</span>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <input type="text" id="whitelist-input" placeholder="🌐 Enter domain to allow access...">
+                <button id="add-whitelist-btn" class="primary-button">✅ Allow</button>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" id="whitelist-search" class="search-input" placeholder="🔍 Search whitelisted domains...">
+            </div>
+
+            <div class="bulk-operations">
+                <button id="export-whitelist" class="bulk-btn">📤 Export</button>
+                <button id="import-whitelist" class="bulk-btn">📥 Import</button>
+                <button id="clear-whitelist" class="bulk-btn danger">🗑️ Clear All</button>
+            </div>
+            
+            <div class="section-header">
+                <h3><span class="section-icon">✅</span>Whitelisted Domains <span id="whitelisted-count-display" class="domain-count"></span></h3>
+            </div>
+            <div id="whitelist"></div>
+        </div>
+
+        <div class="tab-content" id="impact-content">
+            <div class="stats-container">
+                <div class="stats-row">
+                    <span class="stats-label">🎯 Sites Blocked:</span>
+                    <span class="stats-value" id="impact-sites-blocked">0</span>
+                </div>
+                <div class="stats-row">
+                    <span class="stats-label">💰 Revenue Denied:</span>
+                    <span class="stats-value" id="impact-revenue-denied">$0.00</span>
+                </div>
+                <div class="stats-row">
+                    <span class="stats-label">📅 Days Active:</span>
+                    <span class="stats-value" id="impact-days-active">0</span>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h3><span class="section-icon">📊</span>Your Personal Impact</h3>
+            </div>
+
+            <div class="impact-visualization">
+                <div class="impact-card">
+                    <h4>🚫 Blocking Activity</h4>
+                    <div class="impact-metric">
+                        <span class="metric-value" id="total-blocks-impact">0</span>
+                        <span class="metric-label">Total Blocks</span>
+                    </div>
+                    <div class="impact-metric">
+                        <span class="metric-value" id="avg-blocks-daily">0</span>
+                        <span class="metric-label">Avg. Daily Blocks</span>
+                    </div>
+                </div>
+
+                <div class="impact-card">
+                    <h4>💡 Alternative Usage</h4>
+                    <div class="impact-metric">
+                        <span class="metric-value" id="alternatives-used">0</span>
+                        <span class="metric-label">Alternatives Used</span>
+                    </div>
+                    <div class="impact-metric">
+                        <span class="metric-value" id="most-used-alternative">-</span>
+                        <span class="metric-label">Most Used Alternative</span>
+                    </div>
+                </div>
+
+                <div class="impact-card">
+                    <h4>🎯 Quick Actions</h4>
+                    <div class="impact-metric">
+                        <span class="metric-value" id="actions-taken">0</span>
+                        <span class="metric-label">Actions Taken</span>
+                    </div>
+                    <div class="impact-metric">
+                        <span class="metric-value" id="donations-clicked">0</span>
+                        <span class="metric-label">Donation Links Clicked</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h3><span class="section-icon">🌟</span>Quick Actions for Palestine</h3>
+            </div>
+
+            <div class="quick-actions-grid">
+                <div class="action-category">
+                    <h4>💝 Donate</h4>
+                    <a href="https://www.pcrf.net/donate" target="_blank" class="action-link">Palestine Children's Relief Fund</a>
+                    <a href="https://www.map.org.uk/donate" target="_blank" class="action-link">Medical Aid for Palestinians</a>
+                    <a href="https://donate.unrwa.org" target="_blank" class="action-link">UNRWA</a>
+                </div>
+                
+                <div class="action-category">
+                    <h4>📝 Petition</h4>
+                    <a href="https://www.change.org/search?q=free%20palestine" target="_blank" class="action-link">Free Palestine Petitions</a>
+                    <a href="https://bdsmovement.net/get-involved" target="_blank" class="action-link">Join BDS Campaigns</a>
+                </div>
+                
+                <div class="action-category">
+                    <h4>📞 Contact</h4>
+                    <a href="https://www.congress.gov/members/find-your-member" target="_blank" class="action-link">Contact Congress (US)</a>
+                    <a href="https://www.parliament.uk/get-involved/contact-your-mp/" target="_blank" class="action-link">Contact Parliament (UK)</a>
+                </div>
+                
+                <div class="action-category">
+                    <h4>📢 Share</h4>
+                    <a href="https://twitter.com/intent/tweet?text=I'm%20using%20the%20Israeli%20Domain%20Blocker%20to%20support%20Palestine%20🇵🇸%20%23FreePalestine%20%23BDS" target="_blank" class="action-link">Share on Twitter</a>
+                    <a href="https://decolonizepalestine.com/" target="_blank" class="action-link">Learn Palestinian History</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-content" id="categories-content">
+            <div class="stats-container">
+                <div class="stats-row">
+                    <span class="stats-label">📊 Total Categories:</span>
+                    <span class="stats-value" id="categories-count">0</span>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="category-search" class="search-input" placeholder="🔍 Search categories...">
+            </div>
+
+            <div class="section-header">
+                <h3><span class="section-icon">📊</span>Domain Categories</h3>
+            </div>
+            
+            <div id="categories-list" class="categories-container">
+                <!-- Categories will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <div class="tab-content" id="submit-content">
+            <div class="stats-container">
+                <div class="stats-row">
+                    <span class="stats-label">⏳ Pending Submissions:</span>
+                    <span class="stats-value" id="pending-count">0</span>
+                </div>
+                <div class="stats-row">
+                    <span class="stats-label">✅ Approved Submissions:</span>
+                    <span class="stats-value" id="approved-count">0</span>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h3><span class="section-icon">➕</span>Submit New Domain</h3>
+            </div>
+
+            <div class="submit-form">
+                <div class="input-group">
+                    <input type="text" id="submit-domain" placeholder="🌐 Enter domain to submit...">
+                </div>
+                
+                <div class="input-group">
+                    <select id="submit-category" class="category-select">
+                        <option value="">📋 Select category...</option>
+                        <option value="israeli_fintech">🏦 Israeli Fintech & Payments</option>
+                        <option value="israeli_cybersecurity">🔒 Israeli Cybersecurity</option>
+                        <option value="advocacy_big_tech">🏢 Big Tech with Pro-Israeli Leadership</option>
+                        <option value="contractor_defense">⚔️ Defense Contractors</option>
+                        <option value="settlement_hospitality">🏨 Hotels in Illegal Settlements</option>
+                        <option value="settlement_food">🍔 Food Companies with Settlement Operations</option>
+                        <option value="investment_vc">💰 Venture Capital with Israeli Portfolios</option>
+                        <option value="other">❓ Other (specify in evidence)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <textarea id="submit-evidence" placeholder="📝 Provide evidence links and description...
+Example:
+- Company website showing Israeli operations
+- News articles about pro-Israeli statements
+- Financial reports showing Israeli investments
+- Documentation of settlement operations" 
+                        class="evidence-textarea" maxlength="1000"></textarea>
+                    <div class="counter"><span id="evidence-char-count">0</span>/1000</div>
+                </div>
+
+        <div class="input-group">
+                    <input type="text" id="submit-name" placeholder="👤 Your name/handle (optional)">
+                </div>
+
+                <button id="submit-domain-btn" class="primary-button" style="display: block !important; visibility: visible !important;">📤 Submit for Review</button>
+            </div>
+
+            <div class="section-header">
+                <h3><span class="section-icon">⏳</span>Your Submissions</h3>
+            </div>
+            <div id="user-submissions" class="submissions-container">
+                <!-- User submissions will be populated by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="keyboard-hint">
+            💡 Tip: Use Ctrl+E to export, Ctrl+I to import, Enter to add domains
+        </div>
+    </div>
+
+    <div class="bug-report" title="Report a Bug">
+        🐛
+    </div>
+
+    <div class="modal" id="bug-modal">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h3>Report a Bug</h3>
+            <textarea id="bug-description" placeholder="Describe the issue you're experiencing..." maxlength="500"></textarea>
+            <div class="counter"><span id="char-count">0</span>/500</div>
+            <button id="submit-bug">Submit Report</button>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html>

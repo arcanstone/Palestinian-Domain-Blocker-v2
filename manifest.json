@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Palestinian Domain Blocker",
-  "version": "2.1.2",
+  "version": "2.0.0",
   "description": "Community-driven domain blocking extension supporting Palestinian solidarity through ethical boycotts. Block Israeli domains and companies complicit in occupation.",
   "author": "Palestinian Solidarity Community",
   "homepage_url": "https://github.com/arcanstone/Palestinian-Domain-Blocker-v2",
