@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to release (e.g., v2.1.0)'
+        description: 'Version to release (e.g., v3.1.4)'
         required: true
-        default: 'v2.1.0'
+        default: 'v3.1.4'
 
 jobs:
   build-and-release:
@@ -24,31 +24,85 @@ jobs:
       with:
         node-version: '18'
         
-    - name: Build extension
-      run: node create-release.js
-      
-    - name: Create extension package
+    - name: Install dependencies
+      run: npm install
+        
+    - name: Create Chrome extension package
       run: |
-        cd dist
-        zip -r ../palestinian-domain-blocker-extension.zip .
-        cd ..
+        node -e "
+        const fs = require('fs');
+        const archiver = require('archiver');
+        
+        const output = fs.createWriteStream('palestinian-domain-blocker-chrome.zip');
+        const archive = archiver('zip');
+        output.on('close', () => console.log('Chrome extension packaged successfully!'));
+        archive.pipe(output);
+        
+        const files = ['manifest.json','background.js','popup.html','popup.js','blocked.html','blocked.js','dino-game.js','pixel-fonts.js','icons/','google-example/','README.md','LICENSE'];
+        files.forEach(file => {
+            if(fs.existsSync(file)) {
+                if(fs.statSync(file).isDirectory()) {
+                    archive.directory(file, file);
+                } else {
+                    archive.file(file, {name: file});
+                }
+            }
+        });
+        archive.finalize();
+        "
+        
+    - name: Create Firefox extension package  
+      run: |
+        node -e "
+        const fs = require('fs');
+        const archiver = require('archiver');
+        
+        const output = fs.createWriteStream('palestinian-domain-blocker-firefox.zip');
+        const archive = archiver('zip');
+        output.on('close', () => console.log('Firefox extension packaged successfully!'));
+        archive.pipe(output);
+        
+        const files = [
+            {src: 'manifest-v2-firefox.json', dest: 'manifest.json'},
+            {src: 'background-firefox.js', dest: 'background.js'},
+            {src: 'popup.html', dest: 'popup.html'},
+            {src: 'popup.js', dest: 'popup.js'},
+            {src: 'blocked.html', dest: 'blocked.html'},
+            {src: 'blocked.js', dest: 'blocked.js'},
+            {src: 'dino-game.js', dest: 'dino-game.js'},
+            {src: 'pixel-fonts.js', dest: 'pixel-fonts.js'},
+            {src: 'README.md', dest: 'README.md'},
+            {src: 'LICENSE', dest: 'LICENSE'}
+        ];
+        
+        files.forEach(({src, dest}) => {
+            if(fs.existsSync(src)) {
+                archive.file(src, {name: dest});
+            }
+        });
+        
+        if(fs.existsSync('icons')) archive.directory('icons', 'icons');
+        if(fs.existsSync('google-example')) archive.directory('google-example', 'google-example');
+        
+        archive.finalize();
+        "
         
     - name: Get version info
       id: version
       run: |
         if [ "${{ github.event_name }}" == "push" ] && [ "${{ startsWith(github.ref, 'refs/tags/') }}" == "true" ]; then
-          # Triggered by tag push - use the tag
           TAG_NAME=${GITHUB_REF#refs/tags/}
-          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT  
+          echo "version=${TAG_NAME#v}" >> $GITHUB_OUTPUT
           echo "Using tag from push: $TAG_NAME"
         elif [ -n "${{ github.event.inputs.version }}" ]; then
-          # Manually triggered - use input version
           echo "tag_name=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
+          echo "version=${{ github.event.inputs.version #v}}" >> $GITHUB_OUTPUT  
           echo "Using manual input: ${{ github.event.inputs.version }}"
         else
-          # Fallback to manifest version
           VERSION=$(node -p "require('./manifest.json').version")
           echo "tag_name=v$VERSION" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Using manifest version: v$VERSION"
         fi
         
@@ -56,27 +110,47 @@ jobs:
       id: create_release
       uses: softprops/action-gh-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ steps.version.outputs.tag_name }}
         name: Palestinian Domain Blocker ${{ steps.version.outputs.tag_name }}
         files: |
-          palestinian-domain-blocker-extension.zip
-          INSTALL.md
+          palestinian-domain-blocker-chrome.zip
+          palestinian-domain-blocker-firefox.zip
         body: |
-          ## Palestinian Domain Blocker Extension Release
-          
-          ### 🚀 What's New in This Version
-          - **Verified Military Contractors Only**: Focused list of companies with documented Israeli military ties
-          - **Removed Inaccurate Entries**: Eliminated 240+ companies without verified military connections
-          - **Enhanced Accuracy**: Each blocked domain includes specific evidence and sources
-          - **Professional Standards**: Removed inappropriate content, focused on defensible claims
-          
-          ### 📦 Installation Instructions
-          
-          1. Download the `palestinian-domain-blocker-extension.zip` file below
+          ## What's New in ${{ steps.version.outputs.tag_name }}
+
+          🧹 **Repository Cleanup & Automation**
+          - Removed duplicate and unnecessary files while preserving all functionality
+          - Added automated Firefox Add-ons deployment system  
+          - Fixed Firefox manifest background script reference
+          - Streamlined extension structure with only essential files
+
+          🦊 **Firefox Store Submission** 
+          - Extension successfully submitted to Mozilla Add-ons store
+          - Passed all validation checks
+          - Now available for installation: [Firefox Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/palestinian-domain-blocker/)
+
+          🎮 **Game Features Maintained**
+          - Chrome dinosaur sprite with running animation  
+          - Tuned jump physics (jumpPower: 3, gravity: 0.08)
+          - Proper collision detection with tank obstacles
+          - Pixel-perfect fonts for retro gaming experience
+
+          🚀 **Developer Experience**
+          - Automated deployment: `npm run deploy:firefox`
+          - Clean repository structure (~15 essential files)
+          - Both Chrome and Firefox extensions build correctly
+
+          ### Installation Instructions
+
+          **Firefox (Recommended):**
+          - [Install from Firefox Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/palestinian-domain-blocker/)
+
+          **Chrome/Edge/Brave:**
+          1. Download `palestinian-domain-blocker-chrome.zip` below
           2. Extract the zip file to a folder on your computer
-          3. Open Chrome/Edge/Brave and go to Extensions page (`chrome://extensions/`)
+          3. Open Chrome/Edge and go to Extensions page (`chrome://extensions/`)
           4. Enable "Developer mode" (toggle in top-right corner)
           5. Click "Load unpacked" and select the extracted folder
           6. Pin the extension to your toolbar - you're ready to go!
