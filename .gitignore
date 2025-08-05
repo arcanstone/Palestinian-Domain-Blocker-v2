@@ -18,3 +18,7 @@ Thumbs.db
 # Temporary files
 temp-*/
 *-temp/
+
+# Environment variables
+.env
+.env.local

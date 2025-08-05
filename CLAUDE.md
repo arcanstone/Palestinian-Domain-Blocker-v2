@@ -2,6 +2,12 @@
 
 Essential guidance for Claude Code when working with this repository.
 
+## 🚨 QUICK START FOR NEW CLAUDE SESSIONS
+
+**For releases and deployments, see:** `DEPLOYMENT_GUIDE.md` - Complete step-by-step instructions.
+
+**Environment setup:** Copy `.env.example` to `.env` for Mozilla API credentials.
+
 ## Project Overview
 
 Palestinian Domain Blocker - Browser extension blocking domains of companies with Israeli military contracts. Supports Firefox (Manifest V2) and Chrome (Manifest V3) with educational blocked pages featuring a dinosaur mini-game.

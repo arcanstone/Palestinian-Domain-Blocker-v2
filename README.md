@@ -47,6 +47,12 @@ Each blocked domain has documented military contracts from:
 - Company financial filings
 - Official partnership announcements
 
+## Development
+
+- **For releases and deployments:** See `DEPLOYMENT_GUIDE.md`
+- **For Claude AI sessions:** See `CLAUDE.md`
+- **Quick setup:** Run `setup-env.bat` (Windows) or `setup-env.sh` (Unix)
+
 ## License
 
 MIT
