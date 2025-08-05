@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Palestinian Domain Blocker",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Community-driven domain blocking extension supporting Palestinian solidarity through ethical boycotts. Block Israeli domains and companies complicit in occupation.",
   "author": "Palestinian Solidarity Community",
   "homepage_url": "https://github.com/arcanstone/Palestinian-Domain-Blocker-v2",
@@ -38,8 +38,9 @@
     "chrome-warning.html"
   ],
   "content_security_policy": "script-src 'self'; object-src 'self'",
-  "applications": {
+  "browser_specific_settings": {
     "gecko": {
+      "id": "palestinian-domain-blocker@solidarity.org",
       "strict_min_version": "90.0"
     }
   }
