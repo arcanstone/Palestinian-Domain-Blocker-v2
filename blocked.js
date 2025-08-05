@@ -1,21 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
-    const blockedDomain = urlParams.get('domain') || extractDomainFromReferrer() || extractDomainFromCurrentUrl();
-    if (blockedDomain) {
-        const domainInfoEl = document.getElementById('blocked-domain-info');
-        if (domainInfoEl) {
-            domainInfoEl.textContent = `Blocked domain: ${blockedDomain}`;
-        }
-        loadAlternativeRecommendation(blockedDomain);
-        updateImpactOnBlock(blockedDomain);
-    } else {
-        const fallbackAlternative = {
-            name: "Ethical Alternatives Directory",
-            url: "https://ethical.net",
-            description: "Find ethical alternatives to mainstream services"
-        };
-        showAlternative(fallbackAlternative);
+    const blockedDomain = urlParams.get('domain') || extractDomainFromReferrer() || extractDomainFromCurrentUrl() || 'unknown domain';
+    
+    // Update the blocked domain display
+    const domainEl = document.getElementById('blocked-domain');
+    if (domainEl) {
+        domainEl.textContent = blockedDomain;
+        document.title = `${blockedDomain} - Site Blocked`;
     }
+    
+    // Load alternative recommendation
+    loadAlternativeRecommendation(blockedDomain);
+    updateImpactOnBlock(blockedDomain);
     loadPersonalImpactStats();
     trackBlockEvent(blockedDomain);
 });
@@ -46,26 +42,38 @@ function extractDomainFromCurrentUrl() {
 }
 function loadAlternativeRecommendation(domain) {
     if (!domain) return;
-    chrome.runtime.sendMessage({
-        action: 'getAlternative',
-        domain: domain
-    }, (response) => {
-        if (chrome.runtime.lastError) {
-            const alternative = getLocalAlternative(domain);
-            if (alternative) {
-                showAlternative(alternative);
-            }
-            return;
+    
+    // Try to get alternative from background script
+    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
+        try {
+            chrome.runtime.sendMessage({
+                action: 'getAlternative',
+                domain: domain
+            }, (response) => {
+                if (chrome.runtime.lastError) {
+                    showLocalAlternative(domain);
+                    return;
+                }
+                if (response && response.alternative) {
+                    showAlternative(response.alternative);
+                } else {
+                    showLocalAlternative(domain);
+                }
+            });
+        } catch (error) {
+            showLocalAlternative(domain);
         }
-        if (response && response.alternative) {
-            showAlternative(response.alternative);
-        } else {
-            const alternative = getLocalAlternative(domain);
-            if (alternative) {
-                showAlternative(alternative);
-            }
-        }
-    });
+    } else {
+        // Fallback for Firefox or when runtime is not available
+        showLocalAlternative(domain);
+    }
+}
+
+function showLocalAlternative(domain) {
+    const alternative = getLocalAlternative(domain);
+    if (alternative) {
+        showAlternative(alternative);
+    }
 }
 function getLocalAlternative(domain) {
     const normalizedDomain = domain.replace(/^www\./, '');
@@ -114,14 +122,15 @@ function getLocalAlternative(domain) {
 }
 function showAlternative(alternative) {
     const alternativeSection = document.getElementById('alternative-section');
-    const alternativeName = document.getElementById('alternative-name');
     const alternativeDescription = document.getElementById('alternative-description');
     const alternativeLink = document.getElementById('alternative-link');
-    if (alternativeSection && alternativeName && alternativeDescription && alternativeLink) {
-        alternativeName.textContent = alternative.name;
-        alternativeDescription.textContent = alternative.description;
+    
+    if (alternativeSection && alternativeDescription && alternativeLink) {
+        alternativeLink.textContent = alternative.name;
         alternativeLink.href = alternative.url;
+        alternativeDescription.textContent = alternative.description;
         alternativeSection.style.display = 'block';
+        
         alternativeLink.addEventListener('click', () => {
             trackAlternativeClick(alternative.name);
         });

@@ -1,29 +1,27 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Palestinian Domain Blocker",
-  "version": "2.0.0",
+  "version": "3.1.1",
   "description": "Community-driven domain blocking extension supporting Palestinian solidarity through ethical boycotts. Block Israeli domains and companies complicit in occupation.",
   "author": "Palestinian Solidarity Community",
   "homepage_url": "https://github.com/arcanstone/Palestinian-Domain-Blocker-v2",
   "permissions": [
-    "declarativeNetRequest",
-    "declarativeNetRequestWithHostAccess",
-    "storage",
+    "webRequest",
+    "webRequestBlocking",
+    "storage", 
     "tabs",
-    "webNavigation"
+    "<all_urls>"
   ],
   "background": {
-    "service_worker": "background.js"
+    "scripts": ["background-firefox.js"],
+    "persistent": false
   },
-  "host_permissions": [
-    "*://*/*"
-  ],
-  "action": {
+  "browser_action": {
     "default_popup": "popup.html",
     "default_title": "Palestinian Domain Blocker",
     "default_icon": {
       "16": "icons/icon16.png",
-      "32": "icons/icon32.png",
+      "32": "icons/icon32.png", 
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     }
@@ -31,23 +29,18 @@
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
-    "48": "icons/icon48.png",
+    "48": "icons/icon48.png", 
     "128": "icons/icon128.png"
   },
   "web_accessible_resources": [
-    {
-      "resources": [
-        "blocked.html",
-        "blocked.js",
-        "chrome-warning.html"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
-    }
+    "blocked.html",
+    "blocked.js",
+    "chrome-warning.html"
   ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
-  },
-  "minimum_chrome_version": "88"
+  "content_security_policy": "script-src 'self'; object-src 'self'",
+  "applications": {
+    "gecko": {
+      "strict_min_version": "90.0"
+    }
+  }
 }

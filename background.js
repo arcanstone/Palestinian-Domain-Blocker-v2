@@ -482,8 +482,6 @@ function updateBlockingRules(blockedDomains, whitelistedDomains = []) {
     } catch (error) {
     }
 }
-
-// Extended Google services blocking due to Project Nimbus military contract
 const extendedGoogleServices = [
     'youtube.com', 'gmail.com', 'googledrive.com', 'googlecloud.com',
     'googlemaps.com', 'googletranslate.com', 'googlecalendar.com', 
@@ -491,26 +489,19 @@ const extendedGoogleServices = [
     'googleplay.com', 'googlemeet.com', 'googledocs.com',
     'googlesheets.com', 'googleslides.com', 'googleforms.com'
 ];
-
-// Add extended Google blocking with user choice
 function initializeExtendedGoogleBlocking() {
     chrome.storage.local.get(['blockAllGoogle', 'googleBlockingInitialized'], (data) => {
-        // Only ask once
         if (data.googleBlockingInitialized) return;
-        
-        // Default to blocking extended Google services
         if (data.blockAllGoogle !== false) {
             chrome.storage.local.get(['blockedDomains'], (domainData) => {
                 let blockedDomains = domainData.blockedDomains || [];
                 let domainsAdded = false;
-                
                 extendedGoogleServices.forEach(domain => {
                     if (!blockedDomains.includes(domain)) {
                         blockedDomains.push(domain);
                         domainsAdded = true;
                     }
                 });
-                
                 if (domainsAdded) {
                     chrome.storage.local.set({ 
                         blockedDomains,
@@ -526,7 +517,5 @@ function initializeExtendedGoogleBlocking() {
         }
     });
 }
-
-// Initialize comprehensive blocking
 initializeExtendedGoogleBlocking();
 initializeBlockedDomains();

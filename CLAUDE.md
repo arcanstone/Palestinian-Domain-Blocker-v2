@@ -8,9 +8,18 @@ This is a browser extension that blocks domains of companies with documented Isr
 
 ## Development Commands
 
+### Building
 - `npm run build` - Runs the production build script (build.js) which optimizes files, removes debug code, validates the extension, and generates distribution packages
-- `npm run zip` - Creates a packaged zip file for distribution using archiver
+- `npm run build:chrome` - Build for Chrome (Manifest V3)
+- `npm run build:firefox` - Build for Firefox (Manifest V2)
+- `npm run build:all` - Build for both browsers
 - `npm test` - Currently no tests configured (exits with code 0)
+
+### Packaging
+- `npm run zip` - Creates Chrome zip (default)
+- `npm run zip:chrome` - Creates Chrome extension zip with proper folder structure
+- `npm run zip:firefox` - Creates Firefox extension zip with proper folder structure
+- `npm run zip:all` - Creates both Chrome and Firefox zips
 
 ## Build System
 
@@ -27,11 +36,24 @@ Required files for a valid build:
 
 ## Architecture
 
+### Dual Browser Support
+
+The extension supports both Chrome and Firefox with different API approaches:
+
+**Chrome Version (Manifest V3)**:
+- `background.js` - Service worker using `declarativeNetRequest` API
+- `manifest.json` - Manifest V3 format
+
+**Firefox Version (Manifest V2)**:
+- `background-firefox.js` - Background script using `webRequest` API
+- `manifest-v2-firefox.json` - Manifest V2 format
+
 ### Core Components
 
-- **background.js** - Service worker that handles domain blocking logic using Chrome's declarativeNetRequest API
-- **popup.js/popup.html** - Extension popup interface with tabs for blocked domains, whitelist, impact metrics, categories, and submission
-- **blocked.js/blocked.html** - Page displayed when a blocked domain is accessed, with alternative service suggestions
+- **background.js** - Chrome service worker with declarativeNetRequest API for domain blocking
+- **background-firefox.js** - Firefox background script with webRequest API for domain blocking
+- **popup.js/popup.html** - Extension popup interface with tabs for blocked domains, whitelist, impact metrics, categories, and submission (cross-browser compatible)
+- **blocked.js/blocked.html** - Page displayed when blocked domains are accessed, with alternative service suggestions (cross-browser compatible)
 - **military-contractors-list.js** - Contains the verified list of domains to block, organized by categories
 
 ### Domain Management

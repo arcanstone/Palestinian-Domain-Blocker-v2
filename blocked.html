@@ -127,50 +127,6 @@
         </div>
     </div>
 
-    <script>
-        // Get domain from URL parameter
-        const urlParams = new URLSearchParams(window.location.search);
-        const blockedDomain = urlParams.get('domain') || 'unknown domain';
-        
-        document.getElementById('blocked-domain').textContent = blockedDomain;
-        document.title = `${blockedDomain} - Site Blocked`;
-
-        // Alternative services mapping (simplified)
-        const alternatives = {
-            'google.com': {
-                url: 'https://duckduckgo.com',
-                name: 'DuckDuckGo',
-                description: 'Privacy-focused search engine'
-            },
-            'amazon.com': {
-                url: 'https://ebay.com',
-                name: 'eBay',
-                description: 'Alternative marketplace'
-            },
-            'microsoft.com': {
-                url: 'https://libreoffice.org',
-                name: 'LibreOffice',
-                description: 'Free office suite'
-            },
-            'github.com': {
-                url: 'https://gitlab.com',
-                name: 'GitLab',
-                description: 'Alternative code repository'
-            }
-        };
-
-        // Show alternative if available
-        const alternative = alternatives[blockedDomain];
-        if (alternative) {
-            const altSection = document.getElementById('alternative-section');
-            const altLink = document.getElementById('alternative-link');
-            const altDesc = document.getElementById('alternative-description');
-            
-            altLink.href = alternative.url;
-            altLink.textContent = alternative.name;
-            altDesc.textContent = alternative.description;
-            altSection.style.display = 'block';
-        }
-    </script>
+    <script src="blocked.js"></script>
 </body>
 </html>

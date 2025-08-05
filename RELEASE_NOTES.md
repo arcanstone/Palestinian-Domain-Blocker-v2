@@ -40,5 +40,5 @@
 Built with ❤️ for Palestinian solidarity
 
 ---
-Extension Size: ~49KB
+Extension Size: ~50KB
 Compatible: Chrome 88+, Edge 88+, Firefox 90+, Brave
