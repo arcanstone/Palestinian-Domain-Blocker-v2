@@ -21,7 +21,7 @@ class DinosaurGame {
             width: 40,
             height: 40,
             dy: 0,
-            jumpPower: 1,
+            jumpPower: 3,
             grounded: true,
             color: '#535353',
             animationFrame: 0 // For running animation
@@ -144,7 +144,7 @@ class DinosaurGame {
     updateDinosaur() {
         // Gravity
         if (!this.dino.grounded) {
-            this.dino.dy += 0.04;
+            this.dino.dy += 0.08;
             this.dino.y += this.dino.dy;
         }
         
