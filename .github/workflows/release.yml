@@ -39,14 +39,17 @@ jobs:
         VERSION=$(node -p "require('./manifest.json').version")
         echo "version=v$VERSION" >> $GITHUB_OUTPUT
         
-    - name: Create Release
+    - name: Create Release  
       id: create_release
-      uses: actions/create-release@v1
+      uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
       with:
         tag_name: ${{ github.event.inputs.version || steps.version.outputs.version }}
-        release_name: Palestinian Domain Blocker ${{ github.event.inputs.version || steps.version.outputs.version }}
+        name: Palestinian Domain Blocker ${{ github.event.inputs.version || steps.version.outputs.version }}
+        files: |
+          palestinian-domain-blocker-extension.zip
+          INSTALL.md
         body: |
           ## Palestinian Domain Blocker Extension Release
           
@@ -68,13 +71,3 @@ jobs:
           Built with ❤️ for Palestinian solidarity and factual accuracy
         draft: false
         prerelease: false
-        
-    - name: Upload Extension Package
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./palestinian-domain-blocker-extension.zip
-        asset_name: palestinian-domain-blocker-extension.zip
-        asset_content_type: application/zip
