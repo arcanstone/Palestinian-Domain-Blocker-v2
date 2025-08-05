@@ -19,6 +19,7 @@ Thumbs.db
 temp-*/
 *-temp/
 
-# Environment variables
+# Environment variables and credentials
 .env
 .env.local
+CREDENTIALS.txt

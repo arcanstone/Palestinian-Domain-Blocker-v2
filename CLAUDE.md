@@ -105,8 +105,8 @@ npm run deploy:firefox
 - **Collision**: 4px padding on dino, 2px on obstacles for accurate detection
 
 ### Deployment Tokens
-- **GitHub**: Uses default GITHUB_TOKEN (no setup required)
-- **Mozilla**: User has AMO_JWT_ISSUER and AMO_JWT_SECRET configured
+- **GitHub**: Auto-releases use built-in GITHUB_TOKEN, manual token in CREDENTIALS.txt if needed
+- **Mozilla**: AMO_JWT_ISSUER and AMO_JWT_SECRET configured (values in .env.example)
 
 ### File Rules
 - **NO ZIP files** in repository (use releases only)

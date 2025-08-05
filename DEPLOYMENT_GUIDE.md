@@ -59,6 +59,9 @@ git push origin v3.1.5
 # Copy the .env.example to .env (if not exists):
 cp .env.example .env
 
+# Get actual GitHub token from CREDENTIALS.txt (git-ignored file) if needed
+# Replace placeholder in .env with real token value
+
 # Or manually set for one session:
 export AMO_JWT_ISSUER=user:19234733:86
 export AMO_JWT_SECRET=063a5148fef48a71499801b25550e6ae1ba428fd372ca079715cfd46df3cfd17
@@ -92,7 +95,8 @@ npm run deploy:firefox
 - **Extension ID:** `palestinian-domain-blocker@solidarity.org`
 
 ### GitHub
-- **No setup needed** - GitHub Actions uses built-in `GITHUB_TOKEN`
+- **Auto-releases:** GitHub Actions uses built-in `GITHUB_TOKEN` (no setup needed)
+- **Manual API access:** Personal access token available in `CREDENTIALS.txt` if needed
 - **Repository:** https://github.com/arcanstone/Palestinian-Domain-Blocker-v2
 
 ---
