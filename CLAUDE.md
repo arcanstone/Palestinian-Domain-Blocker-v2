@@ -41,11 +41,12 @@ Update version in BOTH manifests:
 
 ### 2. GitHub Release (Automated)
 ```bash
-# Set GitHub token
-GITHUB_TOKEN=your_token_here
+# Simply push a version tag - GitHub Actions handles the rest
+git tag v3.1.5
+git push origin v3.1.5
 
-# Create release automatically  
-node create-github-release.js  # (script creates itself when needed)
+# Or trigger manually via GitHub web interface:
+# Actions -> Release Extension -> Run workflow
 ```
 
 ### 3. Firefox Deployment (Automated)
@@ -81,7 +82,7 @@ npm run deploy:firefox
 ## Current Status
 
 ### Extension Details
-- **Version**: 3.1.3
+- **Version**: 3.1.4 (latest)
 - **Extension ID**: `palestinian-domain-blocker@solidarity.org`
 - **Size**: ~150KB (Firefox), ~155KB (Chrome)
 
@@ -98,8 +99,8 @@ npm run deploy:firefox
 - **Collision**: 4px padding on dino, 2px on obstacles for accurate detection
 
 ### Deployment Tokens
-- **GitHub**: User has token `github_pat_11APFLTUI0...` (don't store in repo)
-- **Mozilla**: User needs to set AMO_JWT_ISSUER and AMO_JWT_SECRET from Mozilla dev console
+- **GitHub**: Uses default GITHUB_TOKEN (no setup required)
+- **Mozilla**: User has AMO_JWT_ISSUER and AMO_JWT_SECRET configured
 
 ### File Rules
 - **NO ZIP files** in repository (use releases only)
