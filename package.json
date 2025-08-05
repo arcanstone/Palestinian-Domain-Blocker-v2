@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node build.js",
     "test": "echo \"No tests specified\" && exit 0",
-    "zip": "node -e \"const fs=require('fs'); const path=require('path'); const archiver=require('archiver'); const output=fs.createWriteStream('palestinian-domain-blocker-v2.0.0.zip'); const archive=archiver('zip'); output.on('close',()=>console.log('Extension packaged successfully!')); archive.on('error',err=>{throw err;}); archive.pipe(output); const files=['manifest.json','background.js','popup.html','popup.js','blocked.html','blocked.js','icons/']; files.forEach(file=>{if(fs.existsSync(file)){if(fs.statSync(file).isDirectory()){archive.directory(file,file);}else{archive.file(file,{name:file});}}else{console.warn('Missing file:',file);}}); archive.finalize();\""
+    "zip": "node -e \"const fs=require('fs'); const path=require('path'); const archiver=require('archiver'); const output=fs.createWriteStream('palestinian-domain-blocker-v2.0.0.zip'); const archive=archiver('zip'); output.on('close',()=>console.log('Extension packaged successfully!')); archive.on('error',err=>{throw err;}); archive.pipe(output); const folderName='Palestinian-Domain-Blocker'; const files=['manifest.json','background.js','popup.html','popup.js','blocked.html','blocked.js','icons/','README.md','INSTALL.md','QUICK-INSTALL.md','install-extension.bat','install-extension.ps1','LICENSE']; files.forEach(file=>{if(fs.existsSync(file)){if(fs.statSync(file).isDirectory()){archive.directory(file,folderName+'/'+file);}else{archive.file(file,{name:folderName+'/'+file});}}else{console.warn('Missing file:',file);}}); archive.finalize();\""
   },
   "repository": {
     "type": "git",
