@@ -66,21 +66,40 @@ function loadDomainLists() {
 function displayDomains(type, domains) {
     const listElement = document.getElementById(`${type}-list`);
     
+    // Clear existing content
+    while (listElement.firstChild) {
+        listElement.removeChild(listElement.firstChild);
+    }
+    
     if (domains.length === 0) {
-        listElement.innerHTML = `<div class="empty-state">No ${type} domains</div>`;
+        const emptyState = document.createElement('div');
+        emptyState.className = 'empty-state';
+        emptyState.textContent = `No ${type} domains`;
+        listElement.appendChild(emptyState);
         return;
     }
 
-    listElement.innerHTML = domains.map(domain => `
-        <div class="domain-item">
-            <span class="domain-name">${domain}</span>
-            <div class="domain-actions">
-                <button class="btn btn-remove" onclick="removeDomain('${type}', '${domain}')">
-                    Remove
-                </button>
-            </div>
-        </div>
-    `).join('');
+    domains.forEach(domain => {
+        const domainItem = document.createElement('div');
+        domainItem.className = 'domain-item';
+        
+        const domainName = document.createElement('span');
+        domainName.className = 'domain-name';
+        domainName.textContent = domain;
+        
+        const domainActions = document.createElement('div');
+        domainActions.className = 'domain-actions';
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'btn btn-remove';
+        removeBtn.textContent = 'Remove';
+        removeBtn.addEventListener('click', () => removeDomain(type, domain));
+        
+        domainActions.appendChild(removeBtn);
+        domainItem.appendChild(domainName);
+        domainItem.appendChild(domainActions);
+        listElement.appendChild(domainItem);
+    });
 }
 
 function addBlockedDomain() {

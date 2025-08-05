@@ -300,7 +300,7 @@ document.addEventListener('keydown', (e) => {
     }
 });
 const keyboardHint = document.createElement('div');
-keyboardHint.innerHTML = '⌨️ Shortcuts: <strong>Ctrl+D</strong> Donate | <strong>Ctrl+P</strong> Petition | <strong>Ctrl+S</strong> Share';
+keyboardHint.textContent = '⌨️ Shortcuts: Ctrl+D Donate | Ctrl+P Petition | Ctrl+S Share';
 keyboardHint.style.fontSize = '11px';
 keyboardHint.style.opacity = '0.6';
 keyboardHint.style.marginTop = '15px';
