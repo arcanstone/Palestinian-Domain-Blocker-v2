@@ -1,8 +1,9 @@
 # Palestinian Domain Blocker
 
-Browser extension blocking domains with Israeli military contracts.
+Browser extension blocking domains with Israeli military contracts. You can add and remove domains in the interactive popup.
 
-<img width="1920" height="1080" alt="Screenshot (21)" src="https://github.com/user-attachments/assets/486f54d8-5fa5-4899-ac9b-fd43dc89ee75" />
+<img width="1847" height="866" alt="image" src="https://github.com/user-attachments/assets/102cfa97-1f9f-4338-ad33-9ebbc38f5dfb" />
+
 
 ## Install
 
