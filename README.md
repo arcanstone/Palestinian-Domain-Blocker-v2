@@ -7,9 +7,9 @@ Browser extension blocking domains with Israeli military contracts. You can add 
 
 ## Install
 
-Firefox: [Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/palestinian-domain-blocker/) (pending approval)
+Firefox: [Add-ons Store](https://addons.mozilla.org/en-US/firefox/addon/palestinian-domain-blocker/)
 
-Chrome/Edge: Download from [Releases](https://github.com/arcanstone/Palestinian-Domain-Blocker-v2/releases)
+Chrome/Edge: Download from [Releases](https://github.com/arcanstone/Palestinian-Domain-Blocker-v2/releases) (You should not be using chrome though!)
 
 ## Development
 
